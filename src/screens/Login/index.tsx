@@ -1,5 +1,4 @@
-import { Text, View } from "react-native";
-import { LoginContainer, Title, SubTitle } from "./styles";
+import { LoginContainer, Title, SubTitle } from './styles';
 
 export function Login() {
   return (

@@ -1,0 +1,35 @@
+{
+  "extends": [
+    "airbnb",
+    "prettier"
+  ],
+  "parser": "@babel/eslint-parser",
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true,
+      "modules": true
+    },
+    "project": "./tsconfig.json"
+  },
+  "root": true,
+  "rules": {
+    "no-unused-vars": ["error", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }],
+    "import/no-unresolved": "off",
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [".ts", ".tsx"]
+      }
+    ],
+    "prettier/prettier": ["error", { "endOfLine": "auto" }],
+    "indent": "error",
+    "import/extensions": "off",
+    "import/prefer-default-export": "off",
+    "react/react-in-jsx-scope": "off",
+    "camelcase": "off",
+    "no-undef": "off"
+  },
+  "plugins": ["prettier"]
+}

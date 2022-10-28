@@ -1,9 +1,10 @@
-import styled, { css } from "styled-components/native";
+import styled, { css } from 'styled-components/native';
 
 export const LoginContainer = styled.View`
   ${({ theme }) => css`
     flex: 1;
     align-items: center;
+    background: ${theme.COLORS.GRAY_100};
   `}
 `;
 

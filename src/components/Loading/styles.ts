@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components/native";
+import styled, { css } from 'styled-components/native';
 
 export const LoaderContainer = styled.View`
   ${({ theme }) => css`
@@ -12,5 +12,5 @@ export const LoaderContainer = styled.View`
 
 export const Loader = styled.ActivityIndicator.attrs(({ theme }) => ({
   color: theme.COLORS.GRAY_900,
-  size: 'large'
+  size: 'large',
 }))``;

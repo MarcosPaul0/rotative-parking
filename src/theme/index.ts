@@ -1,22 +1,22 @@
 export default {
   COLORS: {
-    WHITE: "#ffffff",
+    WHITE: '#ffffff',
 
-    GRAY_100: "#fafafa",
-    GRAY_200: "#F4F4F5",
-    GRAY_300: "#E6E5E5",
-    GRAY_500: "#8D8686",
-    GRAY_900: "#0F172A",
+    GRAY_100: '#fafafa',
+    GRAY_200: '#F4F4F5',
+    GRAY_300: '#E6E5E5',
+    GRAY_500: '#8D8686',
+    GRAY_900: '#0F172A',
 
-    GREEN_500: "#16A34A",
+    GREEN_500: '#16A34A',
 
-    YELLOW_500: "#FDE047",
+    YELLOW_500: '#FDE047',
 
-    RED_500: "#EF4444",
+    RED_500: '#EF4444',
   },
   FONTS: {
-    REGULAR: "Roboto_400Regular",
-    BOLD: "Roboto_700Bold",
+    REGULAR: 'Roboto_400Regular',
+    BOLD: 'Roboto_700Bold',
   },
   FONT_SIZE: {
     SM: '14px',

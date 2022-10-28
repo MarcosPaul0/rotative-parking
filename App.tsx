@@ -1,13 +1,13 @@
-import { Login } from "@screens/Login";
-import theme from "./src/theme/index";
-import { ThemeProvider } from "styled-components/native";
+import { Login } from '@screens/Login';
+import { ThemeProvider } from 'styled-components/native';
 import {
   useFonts,
   Roboto_400Regular,
   Roboto_700Bold,
-} from "@expo-google-fonts/roboto";
-import { Loading } from "@components/Loading";
-import { StatusBar } from "react-native";
+} from '@expo-google-fonts/roboto';
+import { Loading } from '@components/Loading';
+import { StatusBar } from 'react-native';
+import theme from './src/theme/index';
 
 export default function App() {
   const [fontsLoaded] = useFonts({

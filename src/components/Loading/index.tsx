@@ -1,4 +1,4 @@
-import { Loader, LoaderContainer } from "./styles";
+import { Loader, LoaderContainer } from './styles';
 
 export function Loading() {
   return (
