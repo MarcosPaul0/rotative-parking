@@ -11,6 +11,10 @@
       "@screens/*": ["./src/screens/*"],
       "@routes/*": ["./src/routes/*"],
       "@utils/*": ["./src/utils/*"],
+      "@enums/*": ["./src/enums/*"],
+      "@services/*": ["./src/services/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@contexts/*": ["./src/contexts/*"],
     }
   },
 }

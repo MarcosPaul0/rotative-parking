@@ -24,12 +24,18 @@
       }
     ],
     "prettier/prettier": ["error", { "endOfLine": "auto" }],
-    "indent": "error",
     "import/extensions": "off",
     "import/prefer-default-export": "off",
     "react/react-in-jsx-scope": "off",
     "camelcase": "off",
-    "no-undef": "off"
+    "no-undef": "off",
+    "react/jsx-props-no-spreading": "off",
+    "import/no-extraneous-dependencies": "off",
+    "react/no-unstable-nested-components": "off",
+    "react/require-default-props": "off",
+    "indent": "off",
+    "no-restricted-globals": "off",
+    "no-shadow": "off"
   },
   "plugins": ["prettier"]
 }

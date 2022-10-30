@@ -1,4 +1,4 @@
-import { Login } from '@screens/Login';
+import 'react-native-gesture-handler';
 import { ThemeProvider } from 'styled-components/native';
 import {
   useFonts,
@@ -7,6 +7,8 @@ import {
 } from '@expo-google-fonts/roboto';
 import { Loading } from '@components/Loading';
 import { StatusBar } from 'react-native';
+import { Router } from '@routes/Router';
+import { AuthContextProvider } from '@contexts/AuthContext';
 import theme from './src/theme/index';
 
 export default function App() {
@@ -17,8 +19,13 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <StatusBar barStyle="dark-content" backgroundColor="transparent" />
-      {fontsLoaded ? <Login /> : <Loading />}
+      <AuthContextProvider>
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor={theme.COLORS.GRAY_900}
+        />
+        {fontsLoaded ? <Router /> : <Loading />}
+      </AuthContextProvider>
     </ThemeProvider>
   );
 }

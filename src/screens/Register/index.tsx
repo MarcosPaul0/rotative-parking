@@ -1,35 +1,51 @@
 import { Button } from '@components/Button';
 import { Section } from '@components/Section';
 import { Input } from '@components/Input';
-import { useAuthContext } from '@contexts/AuthContext';
-import { AppRoutes } from '@enums/appRoutes.enum';
-import { useNavigation } from '@react-navigation/native';
 import { useForm } from 'react-hook-form';
 
-export function LoginScreen() {
-  const router = useNavigation();
-
+export function Register() {
   const { control, handleSubmit } = useForm({
     defaultValues: {
-      login: '',
+      name: '',
+      email: '',
+      cpf: '',
       password: '',
     },
   });
 
-  const { login } = useAuthContext();
-
-  async function onLogin(data) {
-    await login(data);
+  async function onRegisterUser(data) {
+    console.log(data);
   }
 
   return (
     <>
       <Section title="Bem Vindo" subtitle="Preencha seus dados para entrar" />
       <Input
-        label="Email ou CPF"
+        label="Nome"
+        controllerProps={{
+          control,
+          name: 'name',
+        }}
+      />
+
+      <Input
+        label="CPF"
+        controllerProps={{
+          control,
+          name: 'cpf',
+        }}
+        inputProps={{
+          textContentType: 'postalCode',
+        }}
+      />
+      <Input
+        label="Email"
         controllerProps={{
           control,
           name: 'email',
+        }}
+        inputProps={{
+          textContentType: 'emailAddress',
         }}
       />
       <Input
@@ -43,12 +59,7 @@ export function LoginScreen() {
           secureTextEntry: true,
         }}
       />
-      <Button text="Entrar" mb={20} onPress={handleSubmit(onLogin)} />
-      <Button
-        text="Registrar-se"
-        variant="outlined"
-        onPress={() => router.navigate(AppRoutes.REGISTER)}
-      />
+      <Button text="Cadastrar" onPress={handleSubmit(onRegisterUser)} />
     </>
   );
 }

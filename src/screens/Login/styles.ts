@@ -1,29 +1,7 @@
-import styled, { css } from 'styled-components/native';
+import styled from 'styled-components/native';
 
 export const LoginContainer = styled.View`
-  ${({ theme }) => css`
-    flex: 1;
-    align-items: center;
-    background: ${theme.COLORS.GRAY_100};
-  `}
-`;
-
-const BaseText = styled.Text`
-  ${({ theme }) => css`
-    color: ${theme.COLORS.GRAY_900};
-  `}
-`;
-
-export const Title = styled(BaseText)`
-  ${({ theme }) => css`
-    font-family: ${theme.FONTS.BOLD};
-    font-size: ${theme.FONT_SIZE.XLG};
-  `}
-`;
-
-export const SubTitle = styled(BaseText)`
-  ${({ theme }) => css`
-    font-family: ${theme.FONTS.REGULAR};
-    font-size: ${theme.FONT_SIZE.MD};
-  `}
+  flex: 1;
+  padding: 0 20px;
+  width: 100%;
 `;
