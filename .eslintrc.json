@@ -35,7 +35,9 @@
     "react/require-default-props": "off",
     "indent": "off",
     "no-restricted-globals": "off",
-    "no-shadow": "off"
+    "no-shadow": "off",
+    "no-unused-expressions": "off",
+    "react/jsx-no-bind": "off"
   },
   "plugins": ["prettier"]
 }

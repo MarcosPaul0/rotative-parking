@@ -2,8 +2,9 @@ import { StackRouter } from '@routes/StackRouter';
 import { useContext } from 'react';
 import { ThemeContext } from 'styled-components/native';
 import { NavigationContainer } from '@react-navigation/native';
+import { AuthContextProvider } from '@contexts/AuthContext';
 
-export function Router() {
+export function RouterProvider() {
   const { COLORS } = useContext(ThemeContext);
 
   return (
@@ -20,7 +21,9 @@ export function Router() {
         },
       }}
     >
-      <StackRouter />
+      <AuthContextProvider>
+        <StackRouter />
+      </AuthContextProvider>
     </NavigationContainer>
   );
 }

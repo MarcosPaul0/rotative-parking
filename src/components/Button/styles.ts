@@ -22,7 +22,7 @@ const COLOR_TYPES = {
 export const ButtonContainer = styled.TouchableOpacity<ButtonContainerProps>`
   ${({ theme, color, variant, mt, mb, mr, ml }) => css`
     width: 100%;
-    padding: 12px 15px;
+    padding: 10px 15px;
     align-items: center;
     margin: ${mt}px ${mr}px ${mb}px ${ml}px;
 
@@ -39,6 +39,7 @@ export const ButtonContainer = styled.TouchableOpacity<ButtonContainerProps>`
 export const ButtonText = styled.Text<ButtonProps>`
   ${({ theme, color, variant }) => css`
     font-family: ${theme.FONTS.BOLD};
+    font-size: ${theme.FONT_SIZE.MD};
     color: ${variant === 'filled'
       ? theme.COLORS.GRAY_100
       : theme.COLORS[COLOR_TYPES[color]]};

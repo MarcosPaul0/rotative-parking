@@ -1,10 +1,5 @@
 import styled, { css } from 'styled-components/native';
 
-// export const CardContainer = styled(LinearGradient).attrs(({ theme }) => ({
-//   colors: theme.GRADIENTS.CARD,
-//   start: [1, 1],
-// }))``;
-
 export const TextContainer = styled.View`
   width: 100%;
   margin-bottom: 28px;

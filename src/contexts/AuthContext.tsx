@@ -10,6 +10,9 @@ import {
   createContext,
 } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
+import { AppRoutes } from '@enums/appRoutes.enum';
+import { useNotify } from '@hooks/useNotify';
 
 export interface User {
   name: string;
@@ -39,29 +42,37 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   const [user, setUser] = useState<User | null>(null);
   const isAuthenticated = !!user;
 
+  const { errorNotify } = useNotify();
+
+  const { navigate } = useNavigation();
+
   useEffect(() => {
     async function auth() {
       const token = await AsyncStorage.getItem(StorageItems.TOKEN);
 
       if (token) {
-        // const { data: user } = await apiClient.get<User>(ApiRoutes.USER);
-        // setUser(user);
+        try {
+          const { data: user } = await apiClient.get<User>(ApiRoutes.USER);
+          setUser(user);
+
+          navigate(AppRoutes.HOME);
+        } catch {
+          await AsyncStorage.removeItem(StorageItems.TOKEN);
+        }
       }
     }
 
     auth();
   }, []);
 
-  console.log(user);
-
   async function login({ login, password }: LoginParams) {
     try {
-      const {
-        data: { token },
-      } = await apiClient.post(ApiRoutes.LOGIN, {
+      const response = await apiClient.post(ApiRoutes.LOGIN, {
         login,
         password,
       });
+
+      const { token } = response.data;
 
       apiClient.defaults.headers.Authorization = `Bearer ${token}`;
 
@@ -70,8 +81,13 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       const { data: user } = await apiClient.get<User>(ApiRoutes.USER);
 
       setUser(user);
+
+      navigate(AppRoutes.TAB_ROUTER);
     } catch (error) {
-      console.log(error);
+      errorNotify({
+        title: 'Error ao logar',
+        message: 'Email ou senha inválido',
+      });
     }
   }
 

@@ -7,8 +7,8 @@ import {
 } from '@expo-google-fonts/roboto';
 import { Loading } from '@components/Loading';
 import { StatusBar } from 'react-native';
-import { Router } from '@routes/Router';
-import { AuthContextProvider } from '@contexts/AuthContext';
+import { RouterProvider } from '@routes/Router';
+import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import theme from './src/theme/index';
 
 export default function App() {
@@ -19,13 +19,18 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <AuthContextProvider>
-        <StatusBar
-          barStyle="light-content"
-          backgroundColor={theme.COLORS.GRAY_900}
-        />
-        {fontsLoaded ? <Router /> : <Loading />}
-      </AuthContextProvider>
+      {fontsLoaded ? (
+        <>
+          <StatusBar
+            barStyle="light-content"
+            backgroundColor={theme.COLORS.GRAY_900}
+          />
+          <RouterProvider />
+        </>
+      ) : (
+        <Loading />
+      )}
+      <Toast />
     </ThemeProvider>
   );
 }
