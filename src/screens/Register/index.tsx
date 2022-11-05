@@ -31,7 +31,7 @@ export function RegisterScreen() {
     },
   });
 
-  async function onRegisterUser({
+  async function registerUser({
     cpf,
     email,
     name,
@@ -103,7 +103,7 @@ export function RegisterScreen() {
 
         <Button
           text="Cadastrar"
-          onPress={handleSubmit(onRegisterUser)}
+          onPress={handleSubmit(registerUser)}
           isLoading={isSubmitting}
         />
       </Card>

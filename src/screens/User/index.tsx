@@ -1,11 +1,14 @@
 import { Button } from '@components/Button';
 import { Card } from '@components/Card';
 import { Input } from '@components/Input';
+import { Modal } from '@components/Modal';
 import { useAuthContext } from '@contexts/AuthContext';
 import { ApiRoutes } from '@enums/apiRoutes.enum';
+import { AppRoutes } from '@enums/appRoutes.enum';
 import { useNotify } from '@hooks/useNotify';
 import { apiClient } from '@services/apiClient';
 import { ScreenContainer } from '@styles/defaults';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 interface UpdateUserData {
@@ -15,6 +18,8 @@ interface UpdateUserData {
 }
 
 export function UserScreen() {
+  const [deleteUserModalIsOpen, setDeleteUserModalIsOpen] = useState(false);
+
   const { user, isAuthenticated } = useAuthContext();
 
   const { successNotify, errorNotify } = useNotify();
@@ -58,6 +63,7 @@ export function UserScreen() {
       successNotify({
         title: 'Usuário deletado',
         message: 'Seu perfil foi deletado',
+        redirectsTo: AppRoutes.LOGIN,
       });
     } catch (error) {
       errorNotify({
@@ -67,8 +73,30 @@ export function UserScreen() {
     }
   }
 
+  function closeDeleteUserModal() {
+    setDeleteUserModalIsOpen(false);
+  }
+
+  function openDeleteUserModal() {
+    setDeleteUserModalIsOpen(true);
+  }
+
   return (
     <ScreenContainer>
+      <Modal
+        text="Tem certeza que deseja deletar sua conta? Esta é uma decisão definitiva"
+        animationType="fade"
+        visible={deleteUserModalIsOpen}
+      >
+        <Button text="Sim" bgColor="red" mt={20} onPress={deleteUser} />
+        <Button
+          text="Cancelar"
+          variant="outlined"
+          mt={20}
+          onPress={closeDeleteUserModal}
+        />
+      </Modal>
+
       <Card title="Meu Perfil" subtitle="Gerencie seu perfil">
         <Input
           label="Nome"
@@ -103,7 +131,7 @@ export function UserScreen() {
           bgColor="red"
           variant="outlined"
           mt={20}
-          onPress={deleteUser}
+          onPress={openDeleteUserModal}
         />
       </Card>
     </ScreenContainer>

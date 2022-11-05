@@ -25,7 +25,7 @@ export const InputField = styled.TextInput.attrs(({ theme }) => ({
     max-height: 42px;
 
     border-radius: 6px;
-    font-size: ${theme.FONT_SIZE.SM};
+    font-size: ${theme.FONT_SIZE.MD};
 
     border: 1px solid ${hasError ? theme.COLORS.RED_500 : theme.COLORS.GRAY_700};
     background: ${theme.COLORS.GRAY_300};

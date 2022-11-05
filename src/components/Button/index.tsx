@@ -1,7 +1,7 @@
-import { TouchableProps } from 'react-native-svg';
+import { TouchableOpacityProps } from 'react-native';
 import { ButtonContainer, ButtonText, Loader } from './styles';
 
-export interface ButtonProps extends TouchableProps {
+export interface ButtonProps extends TouchableOpacityProps {
   text: string;
   bgColor?: 'red' | 'yellow' | 'green' | 'sky';
   variant?: 'filled' | 'outlined' | 'text';

@@ -30,9 +30,9 @@ export const ButtonContainer = styled.TouchableOpacity<ButtonContainerProps>`
     background: ${variant === 'filled'
       ? theme.COLORS[COLOR_TYPES[color]]
       : 'rgba(0, 0, 0, 0)'};
-    border: ${variant === 'outlined'
-      ? `solid 1px ${theme.COLORS[COLOR_TYPES[color]]}`
-      : 'none'};
+    border: ${variant === 'text'
+      ? 'none'
+      : `solid 1px ${theme.COLORS[COLOR_TYPES[color]]}`};
   `}
 `;
 

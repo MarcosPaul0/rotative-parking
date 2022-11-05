@@ -50,26 +50,24 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   const { navigate } = useNavigation();
 
   useEffect(() => {
-    async function auth() {
+    (async () => {
       const token = await AsyncStorage.getItem(StorageItems.TOKEN);
 
       if (token) {
         apiClient.defaults.headers.Authorization = `Bearer ${token}`;
 
         try {
-          const { data: user } = await apiClient.get<User>(ApiRoutes.ME);
-          setUser(user);
+          const { data } = await apiClient.get<User>(ApiRoutes.ME);
+          setUser(data);
 
-          navigate(AppRoutes.HOME);
+          navigate(AppRoutes.TAB_ROUTER);
         } catch {
           await AsyncStorage.removeItem(StorageItems.TOKEN);
         }
       } else {
         navigate(AppRoutes.LOGIN);
       }
-    }
-
-    auth();
+    })();
   }, []);
 
   async function login({ login, password }: LoginParams) {
@@ -85,9 +83,9 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
       await AsyncStorage.setItem(StorageItems.TOKEN, token);
 
-      const { data: user } = await apiClient.get<User>(ApiRoutes.ME);
+      const { data } = await apiClient.get<User>(ApiRoutes.ME);
 
-      setUser(user);
+      setUser(data);
 
       navigate(AppRoutes.TAB_ROUTER);
     } catch (error) {

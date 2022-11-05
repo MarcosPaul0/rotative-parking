@@ -30,10 +30,6 @@ export function LoginScreen() {
     },
   });
 
-  async function onLogin(data: LoginData) {
-    await login(data);
-  }
-
   function navigateToRegisterScreen() {
     navigate(AppRoutes.REGISTER);
   }
@@ -72,7 +68,7 @@ export function LoginScreen() {
           }}
         />
 
-        <Button text="Entrar" mb={20} onPress={handleSubmit(onLogin)} />
+        <Button text="Entrar" mb={20} onPress={handleSubmit(login)} />
         <Button
           text="Comprar créditos"
           variant="outlined"
