@@ -1,14 +1,15 @@
 import { TouchableProps } from 'react-native-svg';
-import { ButtonContainer, ButtonText } from './styles';
+import { ButtonContainer, ButtonText, Loader } from './styles';
 
 export interface ButtonProps extends TouchableProps {
   text: string;
   bgColor?: 'red' | 'yellow' | 'green' | 'sky';
-  variant?: 'filled' | 'outlined';
+  variant?: 'filled' | 'outlined' | 'text';
   mt?: number;
   mb?: number;
   mr?: number;
   ml?: number;
+  isLoading?: boolean;
 }
 
 export function Button({
@@ -19,8 +20,12 @@ export function Button({
   mb = 0,
   mr = 0,
   ml = 0,
+  isLoading,
+  disabled,
   ...rest
 }: ButtonProps) {
+  const isDisabled = isLoading || disabled;
+
   return (
     <ButtonContainer
       color={bgColor}
@@ -29,11 +34,16 @@ export function Button({
       mb={mb}
       mr={mr}
       ml={ml}
+      disabled={isDisabled}
       {...rest}
     >
-      <ButtonText color={bgColor} variant={variant}>
-        {text}
-      </ButtonText>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <ButtonText color={bgColor} variant={variant}>
+          {text}
+        </ButtonText>
+      )}
     </ButtonContainer>
   );
 }

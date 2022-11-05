@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components/native';
 
 export interface ButtonProps {
   color: 'red' | 'yellow' | 'green' | 'sky';
-  variant: 'filled' | 'outlined';
+  variant: 'filled' | 'outlined' | 'text';
 }
 
 export interface ButtonContainerProps extends ButtonProps {
@@ -21,8 +21,8 @@ const COLOR_TYPES = {
 
 export const ButtonContainer = styled.TouchableOpacity<ButtonContainerProps>`
   ${({ theme, color, variant, mt, mb, mr, ml }) => css`
-    width: 100%;
-    padding: 10px 15px;
+    width: ${variant === 'text' ? 'auto' : '100%'};
+    padding: ${variant === 'text' ? '0' : '10px 15px'};
     align-items: center;
     margin: ${mt}px ${mr}px ${mb}px ${ml}px;
 
@@ -30,9 +30,9 @@ export const ButtonContainer = styled.TouchableOpacity<ButtonContainerProps>`
     background: ${variant === 'filled'
       ? theme.COLORS[COLOR_TYPES[color]]
       : 'rgba(0, 0, 0, 0)'};
-    border: ${variant === 'filled'
-      ? 'none'
-      : `solid 1px ${theme.COLORS[COLOR_TYPES[color]]}`};
+    border: ${variant === 'outlined'
+      ? `solid 1px ${theme.COLORS[COLOR_TYPES[color]]}`
+      : 'none'};
   `}
 `;
 
@@ -45,3 +45,8 @@ export const ButtonText = styled.Text<ButtonProps>`
       : theme.COLORS[COLOR_TYPES[color]]};
   `}
 `;
+
+export const Loader = styled.ActivityIndicator.attrs(({ theme }) => ({
+  color: theme.COLORS.GRAY_100,
+  size: 'large',
+}))``;

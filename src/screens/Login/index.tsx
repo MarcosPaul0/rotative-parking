@@ -6,7 +6,8 @@ import { AppRoutes } from '@enums/appRoutes.enum';
 import { Validations } from '@enums/validations.enum';
 import { useNavigation } from '@react-navigation/native';
 import { useForm } from 'react-hook-form';
-import { ScreenContainer } from '../../styles/global';
+import { ScreenContainer, Text } from '../../styles/defaults';
+import { RegisterContainer } from './styles';
 
 interface LoginData {
   login: string;
@@ -35,6 +36,10 @@ export function LoginScreen() {
 
   function navigateToRegisterScreen() {
     navigate(AppRoutes.REGISTER);
+  }
+
+  function navigateToStoreScreen() {
+    navigate(AppRoutes.STORE);
   }
 
   return (
@@ -66,12 +71,23 @@ export function LoginScreen() {
             secureTextEntry: true,
           }}
         />
+
         <Button text="Entrar" mb={20} onPress={handleSubmit(onLogin)} />
         <Button
-          text="Registrar-se"
+          text="Comprar créditos"
           variant="outlined"
-          onPress={navigateToRegisterScreen}
+          onPress={navigateToStoreScreen}
         />
+
+        <RegisterContainer>
+          <Text>Não possui uma conta?</Text>
+          <Button
+            text="Registre-se"
+            variant="text"
+            onPress={navigateToRegisterScreen}
+            ml={5}
+          />
+        </RegisterContainer>
       </Card>
     </ScreenContainer>
   );

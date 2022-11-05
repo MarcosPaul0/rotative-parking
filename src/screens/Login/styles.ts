@@ -5,3 +5,8 @@ export const LoginContainer = styled.View`
   padding: 0 20px;
   width: 100%;
 `;
+
+export const RegisterContainer = styled.View`
+  margin-top: 20px;
+  flex-direction: row;
+`;

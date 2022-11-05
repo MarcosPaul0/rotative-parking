@@ -13,11 +13,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { AppRoutes } from '@enums/appRoutes.enum';
 import { useNotify } from '@hooks/useNotify';
+import { Roles } from '@enums/roles.enum';
 
 export interface User {
+  id: number;
   name: string;
   email: string;
   cpf: string;
+  role: Roles;
 }
 
 interface LoginParams {
@@ -51,14 +54,18 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       const token = await AsyncStorage.getItem(StorageItems.TOKEN);
 
       if (token) {
+        apiClient.defaults.headers.Authorization = `Bearer ${token}`;
+
         try {
-          const { data: user } = await apiClient.get<User>(ApiRoutes.USER);
+          const { data: user } = await apiClient.get<User>(ApiRoutes.ME);
           setUser(user);
 
           navigate(AppRoutes.HOME);
         } catch {
           await AsyncStorage.removeItem(StorageItems.TOKEN);
         }
+      } else {
+        navigate(AppRoutes.LOGIN);
       }
     }
 
@@ -78,7 +85,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
       await AsyncStorage.setItem(StorageItems.TOKEN, token);
 
-      const { data: user } = await apiClient.get<User>(ApiRoutes.USER);
+      const { data: user } = await apiClient.get<User>(ApiRoutes.ME);
 
       setUser(user);
 

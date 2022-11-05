@@ -6,7 +6,7 @@ import { AppRoutes } from '@enums/appRoutes.enum';
 import { useNotify } from '@hooks/useNotify';
 import { apiClient } from '@services/apiClient';
 import { useForm } from 'react-hook-form';
-import { ScreenContainer } from '../../styles/global';
+import { ScreenContainer } from '../../styles/defaults';
 
 interface RegisterUserData {
   name: string;
@@ -18,7 +18,11 @@ interface RegisterUserData {
 export function RegisterScreen() {
   const { successNotify, errorNotify } = useNotify();
 
-  const { control, handleSubmit } = useForm<RegisterUserData>({
+  const {
+    control,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm<RegisterUserData>({
     defaultValues: {
       name: '',
       email: '',
@@ -42,13 +46,13 @@ export function RegisterScreen() {
       });
 
       successNotify({
-        title: 'Usuário Registrado',
+        title: 'Usuário registrado',
         message: 'Seus dados foram registrados com sucesso!',
         redirectsTo: AppRoutes.LOGIN,
       });
     } catch (error) {
       errorNotify({
-        title: 'Error no Registro',
+        title: 'Erro ao registrar-se',
         message: 'Erro ao tentar registrar-se tente novamente',
       });
     }
@@ -96,7 +100,12 @@ export function RegisterScreen() {
             secureTextEntry: true,
           }}
         />
-        <Button text="Cadastrar" onPress={handleSubmit(onRegisterUser)} />
+
+        <Button
+          text="Cadastrar"
+          onPress={handleSubmit(onRegisterUser)}
+          isLoading={isSubmitting}
+        />
       </Card>
     </ScreenContainer>
   );
