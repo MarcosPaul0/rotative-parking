@@ -7,10 +7,9 @@ import {
   useForegroundPermissions,
   LocationAccuracy,
 } from 'expo-location';
-import { Info } from '@components/Info';
-import { InfosContainer } from './styles';
+import { InfoContainer, InfoLabel, InfosContainer, InfoText } from './styles';
 
-export function HomeScreen() {
+export function AdminScreen() {
   const [location, setLocation] = useState<LocationObject | null>(null);
   const [status, requestPermission] = useForegroundPermissions();
 
@@ -34,7 +33,7 @@ export function HomeScreen() {
         onMapReady={getLocation}
         style={{
           width: Dimensions.get('window').width,
-          height: Dimensions.get('window').height * 0.65,
+          height: Dimensions.get('window').height * 0.6,
         }}
         region={{
           latitude: location?.coords.latitude || -22.4125,
@@ -48,8 +47,14 @@ export function HomeScreen() {
         maxZoomLevel={18}
       />
       <InfosContainer>
-        <Info label="Vagas Disponíveis" value="35" />
-        <Info label="Tempo Restante" value="00:00" color="red" />
+        <InfoContainer>
+          <InfoLabel>Algum label</InfoLabel>
+          <InfoText>Algum texto</InfoText>
+        </InfoContainer>
+        <InfoContainer>
+          <InfoLabel>Algum label</InfoLabel>
+          <InfoText>Algum texto</InfoText>
+        </InfoContainer>
       </InfosContainer>
     </>
   );

@@ -16,7 +16,7 @@ export const Label = styled.Text`
 `;
 
 export const InputField = styled.TextInput.attrs(({ theme }) => ({
-  selectionColor: theme.COLORS.BLACK,
+  selectionColor: theme.COLORS.GRAY_100,
 }))<InputStyle>`
   ${({ theme, hasError }) => css`
     padding: 0 5px;
@@ -27,8 +27,8 @@ export const InputField = styled.TextInput.attrs(({ theme }) => ({
     border-radius: 6px;
     font-size: ${theme.FONT_SIZE.MD};
 
-    border: 1px solid ${hasError ? theme.COLORS.RED_500 : theme.COLORS.GRAY_700};
-    background: ${theme.COLORS.GRAY_300};
+    border: 1px solid ${hasError ? theme.COLORS.RED_500 : theme.COLORS.GRAY_400};
+    background: ${theme.COLORS.GRAY_500};
     color: ${hasError ? theme.COLORS.RED_500 : theme.COLORS.WHITE};
   `}
 `;

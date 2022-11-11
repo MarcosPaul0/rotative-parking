@@ -37,7 +37,8 @@
     "no-restricted-globals": "off",
     "no-shadow": "off",
     "no-unused-expressions": "off",
-    "react/jsx-no-bind": "off"
+    "react/jsx-no-bind": "off",
+    "react/jsx-no-constructed-context-values": "off"
   },
   "plugins": ["prettier"]
 }

@@ -48,5 +48,5 @@ export const ButtonText = styled.Text<ButtonProps>`
 
 export const Loader = styled.ActivityIndicator.attrs(({ theme }) => ({
   color: theme.COLORS.GRAY_100,
-  size: 'large',
+  size: 'small',
 }))``;

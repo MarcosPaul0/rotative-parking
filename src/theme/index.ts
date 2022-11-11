@@ -7,17 +7,19 @@ export default {
     GRAY_200: '#d4d4d8',
     GRAY_300: '#9E9EAF',
     GRAY_400: '#71717a',
+    GRAY_500: '#737373',
+    GRAY_600: '#525252',
     GRAY_700: '#3C3C43',
     GRAY_800: '#262626',
     GRAY_900: '#121214',
 
-    GREEN_500: '#1D771F',
+    GREEN_500: '#10b981',
 
-    SKY_500: '#0ea5e9',
+    SKY_500: '#38bdf8',
 
     YELLOW_500: '#FDE047',
 
-    RED_500: '#EF4444',
+    RED_500: '#ef4444',
   },
   GRADIENTS: {
     CARD: ['#252233', '#202024'],

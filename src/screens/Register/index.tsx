@@ -3,6 +3,8 @@ import { Card } from '@components/Card';
 import { Input } from '@components/Input';
 import { ApiRoutes } from '@enums/apiRoutes.enum';
 import { AppRoutes } from '@enums/appRoutes.enum';
+import { Patterns } from '@enums/patterns.enum';
+import { Validations } from '@enums/validations.enum';
 import { useNotify } from '@hooks/useNotify';
 import { apiClient } from '@services/apiClient';
 import { useForm } from 'react-hook-form';
@@ -21,7 +23,7 @@ export function RegisterScreen() {
   const {
     control,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { errors, isSubmitting },
   } = useForm<RegisterUserData>({
     defaultValues: {
       name: '',
@@ -63,17 +65,35 @@ export function RegisterScreen() {
       <Card title="Bem Vindo" subtitle="Preencha seus dados para entrar">
         <Input
           label="Nome"
+          errorMessage={errors.name?.message}
           controllerProps={{
             control,
             name: 'name',
+            rules: {
+              required: {
+                value: true,
+                message: Validations.REQUIRED,
+              },
+            },
           }}
         />
 
         <Input
           label="CPF"
+          errorMessage={errors.cpf?.message}
           controllerProps={{
             control,
             name: 'cpf',
+            rules: {
+              required: {
+                value: true,
+                message: Validations.REQUIRED,
+              },
+              pattern: {
+                value: Patterns.CPF,
+                message: Validations.CPF,
+              },
+            },
           }}
           inputProps={{
             textContentType: 'postalCode',
@@ -81,9 +101,20 @@ export function RegisterScreen() {
         />
         <Input
           label="Email"
+          errorMessage={errors.email?.message}
           controllerProps={{
             control,
             name: 'email',
+            rules: {
+              required: {
+                value: true,
+                message: Validations.REQUIRED,
+              },
+              pattern: {
+                value: Patterns.EMAIL,
+                message: Validations.EMAIL,
+              },
+            },
           }}
           inputProps={{
             textContentType: 'emailAddress',
@@ -91,9 +122,20 @@ export function RegisterScreen() {
         />
         <Input
           label="Senha"
+          errorMessage={errors.password?.message}
           controllerProps={{
             control,
             name: 'password',
+            rules: {
+              required: {
+                value: true,
+                message: Validations.REQUIRED,
+              },
+              pattern: {
+                value: Patterns.PASSWORD,
+                message: Validations.PASSWORD,
+              },
+            },
           }}
           inputProps={{
             textContentType: 'password',

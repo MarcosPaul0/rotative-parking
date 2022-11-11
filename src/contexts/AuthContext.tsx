@@ -2,7 +2,6 @@ import { ApiRoutes } from '@enums/apiRoutes.enum';
 import { StorageItems } from '@enums/storageItems.enum';
 import { apiClient } from '@services/apiClient';
 import {
-  useMemo,
   useEffect,
   useState,
   useContext,
@@ -14,6 +13,7 @@ import { useNavigation } from '@react-navigation/native';
 import { AppRoutes } from '@enums/appRoutes.enum';
 import { useNotify } from '@hooks/useNotify';
 import { Roles } from '@enums/roles.enum';
+import { AxiosError } from 'axios';
 
 export interface User {
   id: number;
@@ -63,6 +63,8 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
           navigate(AppRoutes.TAB_ROUTER);
         } catch {
           await AsyncStorage.removeItem(StorageItems.TOKEN);
+
+          navigate(AppRoutes.LOGIN);
         }
       } else {
         navigate(AppRoutes.LOGIN);
@@ -89,10 +91,30 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
       navigate(AppRoutes.TAB_ROUTER);
     } catch (error) {
-      errorNotify({
-        title: 'Error ao logar',
-        message: 'Email ou senha inválido',
-      });
+      if (error instanceof AxiosError) {
+        const { statusCode } = error.response!.data;
+
+        switch (statusCode) {
+          case 401:
+            errorNotify({
+              title: 'Error ao logar',
+              message: 'Email ou senha inválido',
+            });
+            break;
+          case 403:
+            errorNotify({
+              title: 'Error ao logar',
+              message: 'Confirme seu email primeiro',
+            });
+            break;
+          default:
+            errorNotify({
+              title: 'Error ao logar',
+              message: 'Ocorreu algum erro tente novamente mais tarde',
+            });
+            break;
+        }
+      }
     }
   }
 
@@ -100,20 +122,21 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     setUser(null);
 
     await AsyncStorage.removeItem(StorageItems.TOKEN);
+
+    navigate(AppRoutes.LOGIN);
   }
 
-  const contextValue = useMemo(
-    () => ({
-      user,
-      isAuthenticated,
-      login,
-      logout,
-    }),
-    []
-  );
-
   return (
-    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
+    <AuthContext.Provider
+      value={{
+        user,
+        isAuthenticated,
+        login,
+        logout,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
   );
 }
 

@@ -20,7 +20,7 @@ interface UpdateUserData {
 export function UserScreen() {
   const [deleteUserModalIsOpen, setDeleteUserModalIsOpen] = useState(false);
 
-  const { user, isAuthenticated } = useAuthContext();
+  const { user, isAuthenticated, logout } = useAuthContext();
 
   const { successNotify, errorNotify } = useNotify();
 
@@ -132,6 +132,14 @@ export function UserScreen() {
           variant="outlined"
           mt={20}
           onPress={openDeleteUserModal}
+        />
+
+        <Button
+          text="Sair"
+          bgColor="sky"
+          variant="outlined"
+          mt={20}
+          onPress={logout}
         />
       </Card>
     </ScreenContainer>

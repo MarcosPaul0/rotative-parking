@@ -22,7 +22,7 @@ export function LoginScreen() {
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { isSubmitting, errors },
   } = useForm<LoginData>({
     defaultValues: {
       login: '',
@@ -35,7 +35,7 @@ export function LoginScreen() {
   }
 
   function navigateToStoreScreen() {
-    navigate(AppRoutes.STORE);
+    navigate(AppRoutes.OFFLINE_STORE);
   }
 
   return (
@@ -68,7 +68,12 @@ export function LoginScreen() {
           }}
         />
 
-        <Button text="Entrar" mb={20} onPress={handleSubmit(login)} />
+        <Button
+          text="Entrar"
+          mb={20}
+          onPress={handleSubmit(login)}
+          isLoading={isSubmitting}
+        />
         <Button
           text="Comprar créditos"
           variant="outlined"
@@ -77,6 +82,7 @@ export function LoginScreen() {
 
         <RegisterContainer>
           <Text>Não possui uma conta?</Text>
+
           <Button
             text="Registre-se"
             variant="text"
