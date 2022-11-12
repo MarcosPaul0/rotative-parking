@@ -22,6 +22,8 @@ const COLOR_TYPES = {
 export const ButtonContainer = styled.TouchableOpacity<ButtonContainerProps>`
   ${({ theme, color, variant, mt, mb, mr, ml }) => css`
     width: ${variant === 'text' ? 'auto' : '100%'};
+    min-height: 42px;
+    max-height: 42px;
     padding: ${variant === 'text' ? '0' : '10px 15px'};
     align-items: center;
     margin: ${mt}px ${mr}px ${mb}px ${ml}px;

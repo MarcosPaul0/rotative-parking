@@ -9,9 +9,10 @@ export declare global {
       [AppRoutes.USER]: undefined;
       [AppRoutes.VEHICLES]: undefined;
       [AppRoutes.LOGIN]: undefined;
-      [AppRoutes.OFFLINE_STORE]: undefined;
+      [AppRoutes.OUT_STORE]: undefined;
       [AppRoutes.TAB_ROUTER]: undefined;
       [AppRoutes.STACK_ROUTER]: undefined;
+      [AppRoutes.FISCAL]: undefined;
     }
   }
 }

@@ -7,6 +7,7 @@ import { HomeScreen } from '@screens/Home';
 import { useAuthContext } from '@contexts/AuthContext';
 import { Roles } from '@enums/roles.enum';
 import { AdminScreen } from '@screens/Admin';
+import { FiscalScreen } from '@screens/Fiscal';
 import { AppRoutes } from '../../enums/appRoutes.enum';
 
 const Tab = createBottomTabNavigator();
@@ -20,7 +21,7 @@ export function TabRouter() {
         header: () => undefined,
       }}
     >
-      {user?.role === Roles.USER ? (
+      {user?.role === Roles.USER && (
         <>
           <Tab.Screen
             name={AppRoutes.HOME}
@@ -44,10 +45,20 @@ export function TabRouter() {
             }}
           />
         </>
-      ) : (
+      )}
+      {user?.role === Roles.ADMIN && (
         <Tab.Screen
           name={AppRoutes.HOME}
           component={AdminScreen}
+          options={{
+            tabBarIcon: ({ color }) => <House color={color} size={30} />,
+          }}
+        />
+      )}
+      {user?.role === Roles.FISCAL && (
+        <Tab.Screen
+          name={AppRoutes.FISCAL}
+          component={FiscalScreen}
           options={{
             tabBarIcon: ({ color }) => <House color={color} size={30} />,
           }}

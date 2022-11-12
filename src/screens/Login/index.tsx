@@ -35,7 +35,7 @@ export function LoginScreen() {
   }
 
   function navigateToStoreScreen() {
-    navigate(AppRoutes.OFFLINE_STORE);
+    navigate(AppRoutes.OUT_STORE);
   }
 
   return (

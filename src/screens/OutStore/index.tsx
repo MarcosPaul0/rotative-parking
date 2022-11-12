@@ -1,5 +1,5 @@
 import { Text } from '@styles/defaults';
 
-export function OfflineStoreScreen() {
+export function OutStoreScreen() {
   return <Text>Offline Store</Text>;
 }

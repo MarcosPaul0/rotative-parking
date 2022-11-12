@@ -5,7 +5,8 @@ export enum AppRoutes {
   STORE = 'Créditos',
   VEHICLES = 'Veículos',
   REGISTER = 'Registrar',
-  OFFLINE_STORE = 'OfflineStore',
+  OUT_STORE = 'OutStore',
   TAB_ROUTER = 'TabRouter',
   STACK_ROUTER = 'StackRouter',
+  FISCAL = 'Fiscal',
 }

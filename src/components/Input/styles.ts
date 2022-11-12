@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components/native';
 
-interface InputStyle {
+export interface InputStyle {
   hasError: boolean;
 }
 
@@ -16,7 +16,7 @@ export const Label = styled.Text`
 `;
 
 export const InputField = styled.TextInput.attrs(({ theme }) => ({
-  selectionColor: theme.COLORS.GRAY_100,
+  selectionColor: theme.COLORS.BLACK,
 }))<InputStyle>`
   ${({ theme, hasError }) => css`
     padding: 0 5px;
@@ -28,8 +28,8 @@ export const InputField = styled.TextInput.attrs(({ theme }) => ({
     font-size: ${theme.FONT_SIZE.MD};
 
     border: 1px solid ${hasError ? theme.COLORS.RED_500 : theme.COLORS.GRAY_400};
-    background: ${theme.COLORS.GRAY_500};
-    color: ${hasError ? theme.COLORS.RED_500 : theme.COLORS.WHITE};
+    background: ${theme.COLORS.GRAY_200};
+    color: ${hasError ? theme.COLORS.RED_500 : theme.COLORS.BLACK};
   `}
 `;
 

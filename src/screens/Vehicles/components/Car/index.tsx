@@ -49,7 +49,7 @@ export function Car({ car, onUpdate, onDelete }: CarProps) {
 
         <ButtonsContainer>
           <IconButton
-            icon={<Pen color={COLORS.GRAY_100} />}
+            icon={<Pen color={COLORS.BLACK} />}
             bgColor="yellow"
             onPress={openUpdateCarModal}
           />

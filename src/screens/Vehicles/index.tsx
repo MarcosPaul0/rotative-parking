@@ -90,14 +90,77 @@ export function VehiclesScreen() {
       />
 
       <CarsList>
-        {cars.map((car) => (
+        {/* {cars.map((car) => (
           <Car
             key={car.id}
             car={car}
             onUpdate={updateCar}
             onDelete={deleteCar}
           />
-        ))}
+        ))} */}
+        <Car
+          car={{
+            id: 12,
+            name: 'Carro 1',
+            plate: '1234-fed',
+          }}
+          onUpdate={updateCar}
+          onDelete={deleteCar}
+        />
+        <Car
+          car={{
+            id: 12,
+            name: 'Carro 2',
+            plate: '4567-oiu',
+          }}
+          onUpdate={updateCar}
+          onDelete={deleteCar}
+        />
+        <Car
+          car={{
+            id: 12,
+            name: 'Carro 3',
+            plate: '1154-qwe',
+          }}
+          onUpdate={updateCar}
+          onDelete={deleteCar}
+        />
+        <Car
+          car={{
+            id: 12,
+            name: 'Carro 3',
+            plate: '1154-qwe',
+          }}
+          onUpdate={updateCar}
+          onDelete={deleteCar}
+        />
+        <Car
+          car={{
+            id: 12,
+            name: 'Carro 3',
+            plate: '1154-qwe',
+          }}
+          onUpdate={updateCar}
+          onDelete={deleteCar}
+        />
+        <Car
+          car={{
+            id: 12,
+            name: 'Carro 3',
+            plate: '1154-qwe',
+          }}
+          onUpdate={updateCar}
+          onDelete={deleteCar}
+        />
+        <Car
+          car={{
+            id: 12,
+            name: 'Carro 3',
+            plate: '1154-qwe',
+          }}
+          onUpdate={updateCar}
+          onDelete={deleteCar}
+        />
       </CarsList>
     </ScreenContainer>
   );

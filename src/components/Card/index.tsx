@@ -10,13 +10,11 @@ interface CardProps {
 }
 
 export function Card({ title, subtitle, children }: CardProps) {
-  const { GRADIENTS } = useContext(ThemeContext);
-
-  const [leftColor, rightColor] = GRADIENTS.CARD;
+  const { COLORS } = useContext(ThemeContext);
 
   return (
     <LinearGradient
-      colors={[leftColor, rightColor]}
+      colors={[COLORS.GRAY_700, COLORS.GRAY_800]}
       style={{
         borderRadius: 10,
         padding: 18,

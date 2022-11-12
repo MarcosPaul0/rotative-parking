@@ -7,7 +7,10 @@ import {
   useForegroundPermissions,
   LocationAccuracy,
 } from 'expo-location';
-import { InfoContainer, InfoLabel, InfosContainer, InfoText } from './styles';
+import { ScreenContainer, ScrollContainer } from '@styles/defaults';
+import { Input } from '@components/Input';
+import { useForm } from 'react-hook-form';
+import { Button } from '@components/Button';
 
 export function AdminScreen() {
   const [location, setLocation] = useState<LocationObject | null>(null);
@@ -27,8 +30,18 @@ export function AdminScreen() {
     );
   }
 
+  const { control } = useForm({
+    defaultValues: {
+      latitude: null,
+      longitude: null,
+      name: '',
+      price: null,
+      vacancies: 0,
+    },
+  });
+
   return (
-    <>
+    <ScrollContainer>
       <MapView
         onMapReady={getLocation}
         style={{
@@ -46,16 +59,33 @@ export function AdminScreen() {
         minZoomLevel={18}
         maxZoomLevel={18}
       />
-      <InfosContainer>
-        <InfoContainer>
-          <InfoLabel>Algum label</InfoLabel>
-          <InfoText>Algum texto</InfoText>
-        </InfoContainer>
-        <InfoContainer>
-          <InfoLabel>Algum label</InfoLabel>
-          <InfoText>Algum texto</InfoText>
-        </InfoContainer>
-      </InfosContainer>
-    </>
+      <ScreenContainer>
+        <Input
+          label="Região"
+          controllerProps={{
+            control,
+            name: 'name',
+          }}
+        />
+
+        <Input
+          label="Preço"
+          controllerProps={{
+            control,
+            name: 'price',
+          }}
+        />
+
+        <Input
+          label="Vagas"
+          controllerProps={{
+            control,
+            name: 'vacancies',
+          }}
+        />
+
+        <Button text="Adicionar Região" />
+      </ScreenContainer>
+    </ScrollContainer>
   );
 }

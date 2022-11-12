@@ -1,6 +1,7 @@
 import { Button } from '@components/Button';
 import { Card } from '@components/Card';
 import { Input } from '@components/Input';
+import { MaskedInput } from '@components/MaskedInput';
 import { ApiRoutes } from '@enums/apiRoutes.enum';
 import { AppRoutes } from '@enums/appRoutes.enum';
 import { Patterns } from '@enums/patterns.enum';
@@ -78,7 +79,7 @@ export function RegisterScreen() {
           }}
         />
 
-        <Input
+        <MaskedInput
           label="CPF"
           errorMessage={errors.cpf?.message}
           controllerProps={{
@@ -95,9 +96,7 @@ export function RegisterScreen() {
               },
             },
           }}
-          inputProps={{
-            textContentType: 'postalCode',
-          }}
+          mask="999.999.999-99"
         />
         <Input
           label="Email"
