@@ -5,6 +5,7 @@ export const SwitchSalesTypeContainer = styled.View`
 
   flex-direction: row;
   align-items: center;
+  margin-bottom: 10px;
 `;
 
 interface TypeButtonStyles {

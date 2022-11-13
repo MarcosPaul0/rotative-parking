@@ -38,7 +38,7 @@ export const InfoValue = styled.Text<InfoValueStyle>`
     text-align: center;
 
     font-family: ${theme.FONTS.BOLD};
-    font-size: ${theme.FONT_SIZE.XLG};
+    font-size: ${theme.FONT_SIZE.XXLG};
     color: ${theme.COLORS[INFO_COLOR[color]]};
   `}
 `;

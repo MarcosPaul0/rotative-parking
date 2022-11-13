@@ -15,7 +15,7 @@ export default {
 
     GREEN_500: '#10b981',
 
-    SKY_500: '#38bdf8',
+    SKY_500: '#0ea5e9',
 
     YELLOW_500: '#FDE047',
 
@@ -34,6 +34,7 @@ export default {
     SM: '14px',
     MD: '16px',
     LG: '18px',
-    XLG: '32px',
+    XLG: '24px',
+    XXLG: '32px',
   },
 } as const;

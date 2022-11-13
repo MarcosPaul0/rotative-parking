@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import { TouchableOpacityProps } from 'react-native';
 import { ButtonContainer, ButtonText, Loader } from './styles';
 
@@ -5,6 +6,7 @@ export interface ButtonProps extends TouchableOpacityProps {
   text: string;
   bgColor?: 'red' | 'yellow' | 'green' | 'sky';
   variant?: 'filled' | 'outlined' | 'text';
+  icon?: ReactNode;
   mt?: number;
   mb?: number;
   mr?: number;
@@ -15,6 +17,7 @@ export interface ButtonProps extends TouchableOpacityProps {
 export function Button({
   bgColor = 'sky',
   text,
+  icon,
   variant = 'filled',
   mt = 0,
   mb = 0,
@@ -40,9 +43,12 @@ export function Button({
       {isLoading ? (
         <Loader />
       ) : (
-        <ButtonText color={bgColor} variant={variant}>
-          {text}
-        </ButtonText>
+        <>
+          {icon}
+          <ButtonText color={bgColor} variant={variant}>
+            {text}
+          </ButtonText>
+        </>
       )}
     </ButtonContainer>
   );

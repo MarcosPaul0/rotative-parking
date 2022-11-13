@@ -1,13 +1,18 @@
-import { Card } from '@components/Card';
-import { ScreenContainer } from '@styles/defaults';
-import { PurchasedCredit } from './components/PurchasedCreditsList';
+import { SearchInput } from '@components/SearchInput';
+import { ScrollScreenContainer } from '@styles/defaults';
+import { CreditOrder } from './components/CreditOrder';
 
 export function FiscalScreen() {
   return (
-    <ScreenContainer>
-      <PurchasedCredit status="canceled" />
-      <PurchasedCredit status="paid" />
-      <PurchasedCredit status="pending" />
-    </ScreenContainer>
+    <ScrollScreenContainer>
+      <SearchInput placeholder="Buscar" />
+      <CreditOrder status="canceled" />
+      <CreditOrder status="paid" />
+      <CreditOrder status="pending" />
+      <CreditOrder status="pending" />
+      <CreditOrder status="pending" />
+      <CreditOrder status="pending" />
+      <CreditOrder status="pending" />
+    </ScrollScreenContainer>
   );
 }

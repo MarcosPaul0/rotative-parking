@@ -19,10 +19,11 @@ export function Card({ title, subtitle, children }: CardProps) {
         borderRadius: 10,
         padding: 18,
         paddingBottom: 30,
+        marginBottom: 18,
       }}
     >
       <TextContainer>
-        <Title>{title}</Title>
+        {title && <Title>{title}</Title>}
         <SubTitle>{subtitle}</SubTitle>
       </TextContainer>
       {children}

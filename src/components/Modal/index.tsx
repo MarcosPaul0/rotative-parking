@@ -16,9 +16,7 @@ export function Modal({
   children,
   ...rest
 }: ModalProps) {
-  const { GRADIENTS } = useContext(ThemeContext);
-
-  const [leftColor, rightColor] = GRADIENTS.CARD;
+  const { COLORS } = useContext(ThemeContext);
 
   return (
     <RNModal transparent {...rest}>
@@ -29,7 +27,7 @@ export function Modal({
             padding: 20,
             width: '100%',
           }}
-          colors={[leftColor, rightColor]}
+          colors={[COLORS.GRAY_700, COLORS.GRAY_800]}
         >
           <ModalText type={textType}>{text}</ModalText>
 

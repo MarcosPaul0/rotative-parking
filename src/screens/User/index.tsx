@@ -8,8 +8,10 @@ import { AppRoutes } from '@enums/appRoutes.enum';
 import { useNotify } from '@hooks/useNotify';
 import { apiClient } from '@services/apiClient';
 import { ScreenContainer } from '@styles/defaults';
-import { useState } from 'react';
+import { SignOut } from 'phosphor-react-native';
+import { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { ThemeContext } from 'styled-components/native';
 
 interface UpdateUserData {
   name: string;
@@ -18,6 +20,8 @@ interface UpdateUserData {
 }
 
 export function UserScreen() {
+  const { COLORS } = useContext(ThemeContext);
+
   const [deleteUserModalIsOpen, setDeleteUserModalIsOpen] = useState(false);
 
   const { user, isAuthenticated, logout } = useAuthContext();
@@ -136,6 +140,13 @@ export function UserScreen() {
 
         <Button
           text="Sair"
+          icon={
+            <SignOut
+              size={22}
+              color={COLORS.SKY_500}
+              style={{ marginRight: 10 }}
+            />
+          }
           bgColor="sky"
           variant="outlined"
           mt={20}

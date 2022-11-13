@@ -11,7 +11,7 @@ export const Title = styled.Text`
     color: ${theme.COLORS.GRAY_100};
 
     font-family: ${theme.FONTS.BOLD};
-    font-size: ${theme.FONT_SIZE.XLG};
+    font-size: ${theme.FONT_SIZE.XXLG};
   `}
 `;
 

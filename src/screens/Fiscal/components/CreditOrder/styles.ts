@@ -1,13 +1,12 @@
 import styled, { css } from 'styled-components/native';
 
-export const PurchasedCreditsContainer = styled.View`
+export const CreditsOrderContainer = styled.View`
   ${({ theme }) => css`
-    flex: 1;
     align-items: center;
-    margin-top: 10px;
+    margin: 10px 0;
     border-radius: 10px;
 
-    padding: 10px;
+    padding: 15px 10px;
     background: ${theme.COLORS.GRAY_700};
     border: solid 1px ${theme.COLORS.GRAY_500};
   `}
@@ -21,7 +20,7 @@ export const InfoContainer = styled.View`
 export const PlateText = styled.Text`
   ${({ theme }) => css`
     font-family: ${theme.FONTS.BOLD};
-    font-size: ${theme.FONT_SIZE.XLG};
+    font-size: ${theme.FONT_SIZE.XXLG};
     color: ${theme.COLORS.GRAY_100};
   `}
 `;
@@ -38,7 +37,6 @@ export const StatusContainer = styled.View`
   margin-top: 5px;
   align-items: center;
   flex-direction: row;
-  flex: 1;
 `;
 
 interface StatusTextStyle {

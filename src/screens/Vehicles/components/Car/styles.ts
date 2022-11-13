@@ -37,7 +37,7 @@ export const CarTitle = styled.Text`
   ${({ theme }) => css`
     line-height: 32px;
     font-family: ${theme.FONTS.BOLD};
-    font-size: ${theme.FONT_SIZE.XLG};
+    font-size: ${theme.FONT_SIZE.XXLG};
     color: ${theme.COLORS.GRAY_100};
   `}
 `;

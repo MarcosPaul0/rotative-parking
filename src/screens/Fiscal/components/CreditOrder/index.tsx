@@ -1,14 +1,11 @@
-import { Text } from '@styles/defaults';
 import { format } from 'date-fns';
 import { Check, ClockClockwise, X } from 'phosphor-react-native';
 import { useContext } from 'react';
 import { ThemeContext } from 'styled-components/native';
 import {
   DateText,
-  InfoContainer,
   PlateText,
-  PurchasedCreditsContainer,
-  Status,
+  CreditsOrderContainer,
   StatusContainer,
   StatusText,
 } from './styles';
@@ -17,7 +14,7 @@ interface PurchasedCreditProps {
   status: 'paid' | 'pending' | 'canceled';
 }
 
-export function PurchasedCredit({ status }: PurchasedCreditProps) {
+export function CreditOrder({ status }: PurchasedCreditProps) {
   const date = format(new Date(), 'dd/MM/yyyy hh:mm:ss');
 
   const { COLORS } = useContext(ThemeContext);
@@ -43,7 +40,7 @@ export function PurchasedCredit({ status }: PurchasedCreditProps) {
   const STATUS = STATUS_DATA[status];
 
   return (
-    <PurchasedCreditsContainer>
+    <CreditsOrderContainer>
       <PlateText>1234-SDF</PlateText>
       <DateText>{date}</DateText>
 
@@ -52,6 +49,6 @@ export function PurchasedCredit({ status }: PurchasedCreditProps) {
 
         <StatusText color={STATUS.color}>{STATUS.status}</StatusText>
       </StatusContainer>
-    </PurchasedCreditsContainer>
+    </CreditsOrderContainer>
   );
 }
