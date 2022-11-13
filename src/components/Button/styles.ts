@@ -26,6 +26,7 @@ export const ButtonContainer = styled.TouchableOpacity<ButtonContainerProps>`
     max-height: 42px;
     padding: ${variant === 'text' ? '0' : '10px 15px'};
     margin: ${mt}px ${mr}px ${mb}px ${ml}px;
+    z-index: 1;
 
     flex-direction: row;
     justify-content: center;

@@ -1,5 +1,9 @@
 import styled, { css } from 'styled-components/native';
 
+export const ViewContainer = styled.View`
+  flex: 1;
+`;
+
 export const ScreenContainer = styled.View`
   flex: 1;
   padding: 18px 18px 0 18px;

@@ -16,6 +16,7 @@ export default {
     GREEN_500: '#10b981',
 
     SKY_500: '#0ea5e9',
+    BLUE_800: '#1e40af',
 
     YELLOW_500: '#FDE047',
 
