@@ -18,7 +18,7 @@ export function TabRouter() {
   return (
     <Tab.Navigator
       screenOptions={{
-        header: () => undefined,
+        header: () => null,
       }}
     >
       {user?.role === Roles.USER && (
