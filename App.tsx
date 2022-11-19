@@ -8,7 +8,6 @@ import {
 import { Loading } from '@components/Loading';
 import { StatusBar } from 'react-native';
 import { RouterProvider } from '@routes/Router';
-import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import theme from './src/theme/index';
 
 export default function App() {
@@ -23,14 +22,13 @@ export default function App() {
         <>
           <StatusBar
             barStyle="light-content"
-            backgroundColor={theme.COLORS.GRAY_900}
+            backgroundColor={theme.COLORS.GRAY_700}
           />
           <RouterProvider />
         </>
       ) : (
         <Loading />
       )}
-      <Toast />
     </ThemeProvider>
   );
 }

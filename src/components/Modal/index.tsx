@@ -2,6 +2,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { ReactNode, useContext } from 'react';
 import { Modal as RNModal, ModalProps as RNModalProps } from 'react-native';
 import { ThemeContext } from 'styled-components/native';
+import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import { ModalContainer, ModalText } from './styles';
 
 interface ModalProps extends RNModalProps {
@@ -34,6 +35,8 @@ export function Modal({
           {children}
         </LinearGradient>
       </ModalContainer>
+
+      <Toast />
     </RNModal>
   );
 }

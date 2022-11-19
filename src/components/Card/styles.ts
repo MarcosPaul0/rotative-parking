@@ -1,5 +1,15 @@
 import styled, { css } from 'styled-components/native';
 
+export const CardContainer = styled.View`
+  ${({ theme }) => css`
+    padding: 18px;
+    padding-bottom: 30px;
+    margin-bottom: 18px;
+    background: ${theme.COLORS.GRAY_800};
+    border-radius: 10px;
+  `}
+`;
+
 export const TextContainer = styled.View`
   width: 100%;
   margin-bottom: 28px;

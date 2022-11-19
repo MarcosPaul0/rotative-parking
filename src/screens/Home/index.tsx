@@ -8,6 +8,7 @@ import {
   LocationAccuracy,
 } from 'expo-location';
 import { Info } from '@components/Info';
+import { initialLocation } from '@utils/initialLocation';
 import { InfosContainer } from './styles';
 
 export function HomeScreen() {
@@ -25,7 +26,7 @@ export function HomeScreen() {
   async function getLocation() {
     await watchPositionAsync({ accuracy: LocationAccuracy.High }, (location) =>
       setLocation(location)
-    );
+    ).catch(() => setLocation(initialLocation));
   }
 
   return (

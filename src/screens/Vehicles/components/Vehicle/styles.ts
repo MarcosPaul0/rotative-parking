@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components/native';
 
-export const CarContainer = styled.View`
+export const VehicleContainer = styled.View`
   margin-top: 10px;
   margin-bottom: 10px;
   flex-direction: row;
@@ -33,7 +33,7 @@ export const ButtonsContainer = styled.View`
   `}
 `;
 
-export const CarTitle = styled.Text`
+export const VehicleTitle = styled.Text`
   ${({ theme }) => css`
     line-height: 32px;
     font-family: ${theme.FONTS.BOLD};
@@ -42,7 +42,7 @@ export const CarTitle = styled.Text`
   `}
 `;
 
-export const CarPlate = styled.Text`
+export const VehiclePlate = styled.Text`
   ${({ theme }) => css`
     line-height: 18px;
     font-family: ${theme.FONTS.BOLD};

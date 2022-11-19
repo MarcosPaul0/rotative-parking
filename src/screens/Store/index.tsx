@@ -4,13 +4,15 @@ import { NumberInput } from '@components/NumberInput';
 import { ScreenContainer } from '@styles/defaults';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { format, addHours } from 'date-fns';
 import { CreditCardModal } from './components/CreditCardModal';
 import { SwitchSaleType } from './components/SwitchSaleType';
+import { LeftText, LineContainer, RightText } from './styles';
 
 export interface BuyCreditsData {
   credits: number;
   type: 'creditCard' | 'pix';
-  creditCardId?: string;
+  creditCardId?: number;
 }
 
 export function StoreScreen() {
@@ -20,12 +22,18 @@ export function StoreScreen() {
     defaultValues: {
       credits: 1,
       type: 'creditCard',
-      creditCardId: '',
+      creditCardId: undefined,
     },
   });
 
   const typeWatched = watch('type');
   const creditsWatched = watch('credits');
+
+  const creditsTotal = (creditsWatched * 7.5).toFixed(2).replace('.', ',');
+  const finalDate = format(
+    addHours(new Date(), creditsWatched),
+    'dd/MM/yy hh:mm:ss'
+  );
 
   function addCredit() {
     const currentCredit = getValues('credits');
@@ -47,7 +55,7 @@ export function StoreScreen() {
     setCreditCardModalIsOpen(true);
   }
 
-  function selectCreditCard(creditCardId: string) {
+  function selectCreditCard(creditCardId: number) {
     setValue('creditCardId', creditCardId);
     setCreditCardModalIsOpen(false);
   }
@@ -59,11 +67,26 @@ export function StoreScreen() {
         subtitle="Compre créditos de estacionamento"
       >
         <SwitchSaleType setValue={setValue} type={typeWatched} />
-        <NumberInput
-          number={creditsWatched}
-          add={addCredit}
-          remove={removeCredit}
-        />
+
+        <LineContainer>
+          <LeftText>Quantidade de Créditos</LeftText>
+
+          <NumberInput
+            number={creditsWatched}
+            add={addCredit}
+            remove={removeCredit}
+          />
+        </LineContainer>
+
+        <LineContainer>
+          <LeftText>Validade</LeftText>
+          <RightText>{finalDate}</RightText>
+        </LineContainer>
+
+        <LineContainer>
+          <LeftText>Total</LeftText>
+          <RightText>R$ {creditsTotal}</RightText>
+        </LineContainer>
 
         {typeWatched === 'creditCard' ? (
           <>

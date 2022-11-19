@@ -12,6 +12,7 @@ import { SignOut } from 'phosphor-react-native';
 import { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { ThemeContext } from 'styled-components/native';
+import { Toast } from 'react-native-toast-message/lib/src/Toast';
 
 interface UpdateUserData {
   name: string;
@@ -153,6 +154,8 @@ export function UserScreen() {
           onPress={logout}
         />
       </Card>
+
+      <Toast />
     </ScreenContainer>
   );
 }

@@ -43,7 +43,6 @@ interface MaskedInputProps {
 const styles = StyleSheet.create({
   input: {
     padding: 5,
-    flex: 1,
     minHeight: 42,
     maxHeight: 42,
     borderRadius: 6,

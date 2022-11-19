@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { UserScreen } from '@screens/User';
 import { StoreScreen } from '@screens/Store';
 import { VehiclesScreen } from '@screens/Vehicles';
-import { House, User, Storefront, Car } from 'phosphor-react-native';
+import { Car, House, Storefront, User } from 'phosphor-react-native';
 import { HomeScreen } from '@screens/Home';
 import { useAuthContext } from '@contexts/AuthContext';
 import { Roles } from '@enums/roles.enum';

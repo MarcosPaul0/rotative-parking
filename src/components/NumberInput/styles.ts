@@ -7,7 +7,7 @@ export const NumberInputContainer = styled.View`
 export const NumberContent = styled.Text`
   ${({ theme }) => css`
     padding: 8px 10px;
-    font-size: ${theme.FONT_SIZE.XXLG};
+    font-size: ${theme.FONT_SIZE.XLG};
     font-family: ${theme.FONTS.BOLD};
     color: ${theme.COLORS.GRAY_100};
   `}

@@ -6,50 +6,50 @@ import { useNotify } from '@hooks/useNotify';
 import { apiClient } from '@services/apiClient';
 import { useForm } from 'react-hook-form';
 
-interface RegisterCarModalProps {
+interface RegisterVehicleModalProps {
   isOpen: boolean;
   onCloseModal: () => void;
 }
 
-interface RegisterCarData {
+interface RegisterVehicleData {
   name: string;
   plate: string;
 }
 
-export function RegisterCarModal({
+export function RegisterVehicleModal({
   isOpen,
   onCloseModal,
-}: RegisterCarModalProps) {
+}: RegisterVehicleModalProps) {
   const { successNotify, errorNotify } = useNotify();
 
-  const { control, handleSubmit } = useForm<RegisterCarData>({
+  const { control, handleSubmit } = useForm<RegisterVehicleData>({
     defaultValues: {
       name: '',
       plate: '',
     },
   });
 
-  async function registerCar({ name, plate }: RegisterCarData) {
+  async function registerCar({ name, plate }: RegisterVehicleData) {
     try {
-      await apiClient.post(ApiRoutes.CARS, {
+      await apiClient.post(ApiRoutes.VEHICLE, {
         name,
         plate,
       });
 
       successNotify({
-        title: 'Carro registrado',
-        message: 'O carro foi registrado com sucesso',
+        title: 'Veículo registrado',
+        message: 'O veículo foi registrado com sucesso',
       });
     } catch {
       errorNotify({
-        title: 'Erro ao registrar o carro',
-        message: 'Ocorreu um erro ao registrar o carro, tente novamente',
+        title: 'Erro ao registrar o veículo',
+        message: 'Ocorreu um erro ao registrar o veículo, tente novamente',
       });
     }
   }
 
   return (
-    <Modal visible={isOpen} text="Registre um Carro" textType="title">
+    <Modal visible={isOpen} text="Registre um Veículo" textType="title">
       <Input
         label="Nome"
         controllerProps={{

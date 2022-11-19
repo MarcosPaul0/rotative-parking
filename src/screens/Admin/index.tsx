@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Dimensions } from 'react-native';
-import MapView from 'react-native-maps';
+// eslint-disable-next-line no-unused-vars
+import MapView, { MapEvent } from 'react-native-maps';
 import {
   watchPositionAsync,
   LocationObject,
@@ -13,6 +14,7 @@ import { Map } from '@enums/map.enum';
 import { Location } from '@screens/Admin/components/Location';
 import { formatPrice } from '@utils/formatPrice';
 import { Button } from '@components/Button';
+import { initialLocation } from '@utils/initialLocation';
 import { LocationModal } from './components/LocationModal';
 import { ButtonContainer } from './styles';
 import { AddLocationModal } from './components/AddLocationModal';
@@ -25,10 +27,13 @@ export interface RegisterLocationData {
   vacancies: number;
 }
 
-export interface Location {
-  id: number;
+export interface NewLocation {
   latitude: number;
   longitude: number;
+}
+
+export interface Location extends NewLocation {
+  id: number;
   name: string;
   price: number;
   vacancies: number;
@@ -38,22 +43,24 @@ export function AdminScreen() {
   const [markers, setMarkers] = useState<Location[]>([
     {
       id: 1,
-      latitude: -22.4247,
-      longitude: -45.4601,
+      latitude: initialLocation.coords.latitude,
+      longitude: initialLocation.coords.longitude,
       name: 'Inicio',
       price: 7.5,
       vacancies: 12,
     },
   ]);
+
   const [markerActive, setMarkerActive] = useState<Location>({
     id: 1,
-    latitude: -22.4247,
-    longitude: -45.4601,
+    latitude: initialLocation.coords.latitude,
+    longitude: initialLocation.coords.longitude,
     name: 'Inicio',
     price: 7.5,
     vacancies: 12,
   });
   const [location, setLocation] = useState<LocationObject | null>(null);
+  const [newLocation, setNewLocation] = useState<NewLocation | null>(null);
   const [status, requestPermission] = useForegroundPermissions();
 
   useEffect(() => {
@@ -67,7 +74,7 @@ export function AdminScreen() {
   async function getLocation() {
     await watchPositionAsync({ accuracy: LocationAccuracy.High }, (location) =>
       setLocation(location)
-    );
+    ).catch(() => setLocation(initialLocation));
   }
 
   const formMethods = useForm<RegisterLocationData>({
@@ -79,6 +86,8 @@ export function AdminScreen() {
       vacancies: 0,
     },
   });
+
+  const { setValue } = formMethods;
 
   const [locationModalIsOpen, setLocationModalIsOpen] = useState(false);
 
@@ -103,6 +112,17 @@ export function AdminScreen() {
 
   function handleCloseAddLocationModal() {
     setAddLocationModalIsOpen(false);
+  }
+
+  function handleSelectLocation(event: MapEvent) {
+    const { latitude, longitude } = event.nativeEvent.coordinate;
+
+    setValue('latitude', latitude);
+    setValue('longitude', longitude);
+    setNewLocation({
+      latitude,
+      longitude,
+    });
   }
 
   return (
@@ -135,15 +155,18 @@ export function AdminScreen() {
             height: Dimensions.get('window').height,
           }}
           region={{
-            latitude: location?.coords.latitude || -22.4247,
+            latitude:
+              location?.coords.latitude || initialLocation.coords.latitude,
             latitudeDelta: Map.LATITUDE_DELTA,
-            longitude: location?.coords.longitude || -45.4601,
+            longitude:
+              location?.coords.longitude || initialLocation.coords.longitude,
             longitudeDelta: Map.LONGITUDE_DELTA,
           }}
           followsUserLocation
           showsUserLocation
           minZoomLevel={18}
           maxZoomLevel={18}
+          onPress={handleSelectLocation}
         >
           {markers.map((location) => (
             <Location
@@ -153,6 +176,14 @@ export function AdminScreen() {
               onLocationPress={() => handlePressLocation(location)}
             />
           ))}
+
+          {newLocation && (
+            <Location
+              latitude={newLocation.latitude}
+              longitude={newLocation.longitude}
+              color="red"
+            />
+          )}
         </MapView>
       </ViewContainer>
     </FormProvider>

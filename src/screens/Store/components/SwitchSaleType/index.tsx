@@ -1,6 +1,15 @@
 import { BuyCreditsData } from '@screens/Store';
+import { CreditCard } from 'phosphor-react-native';
+import { useContext } from 'react';
 import { UseFormSetValue } from 'react-hook-form';
-import { SwitchSalesTypeContainer, TypeButton, TypeButtonText } from './styles';
+import { ThemeContext } from 'styled-components/native';
+import { Pix } from '../../../../icons/Pix';
+import {
+  SwitchSalesTypeContainer,
+  TextContainer,
+  TypeButton,
+  TypeButtonText,
+} from './styles';
 
 interface SwitchSaleTypeProps {
   setValue: UseFormSetValue<BuyCreditsData>;
@@ -8,6 +17,8 @@ interface SwitchSaleTypeProps {
 }
 
 export function SwitchSaleType({ type, setValue }: SwitchSaleTypeProps) {
+  const { COLORS } = useContext(ThemeContext);
+
   return (
     <SwitchSalesTypeContainer>
       <TypeButton
@@ -15,9 +26,16 @@ export function SwitchSaleType({ type, setValue }: SwitchSaleTypeProps) {
         onPress={() => setValue('type', 'creditCard')}
         spacing={2}
       >
-        <TypeButtonText isActive={type === 'creditCard'}>
-          Cartão de Crédito
-        </TypeButtonText>
+        <CreditCard
+          size={54}
+          color={type === 'creditCard' ? COLORS.GRAY_100 : COLORS.GREEN_500}
+        />
+
+        <TextContainer>
+          <TypeButtonText isActive={type === 'creditCard'}>
+            Cartão de Crédito
+          </TypeButtonText>
+        </TextContainer>
       </TypeButton>
 
       <TypeButton
@@ -26,7 +44,11 @@ export function SwitchSaleType({ type, setValue }: SwitchSaleTypeProps) {
         ml={20}
         spacing={1}
       >
-        <TypeButtonText isActive={type === 'pix'}>PIX</TypeButtonText>
+        <Pix color={type === 'pix' ? COLORS.GRAY_100 : COLORS.GREEN_500} />
+
+        <TextContainer>
+          <TypeButtonText isActive={type === 'pix'}>PIX</TypeButtonText>
+        </TextContainer>
       </TypeButton>
     </SwitchSalesTypeContainer>
   );

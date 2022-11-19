@@ -37,6 +37,7 @@ export const ErrorMessage = styled.Text`
   ${({ theme }) => css`
     font-size: ${theme.FONT_SIZE.XSM};
     color: ${theme.COLORS.RED_500};
-    height: 22px;
+    min-height: 22px;
+    max-height: 22px;
   `}
 `;

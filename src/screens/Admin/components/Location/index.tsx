@@ -8,12 +8,14 @@ interface LocationProps {
   latitude: number;
   longitude: number;
   onLocationPress?: () => void;
+  color?: 'blue' | 'red';
 }
 
 export function Location({
   latitude,
   longitude,
   onLocationPress,
+  color = 'blue',
 }: LocationProps) {
   const { COLORS } = useContext(ThemeContext);
 
@@ -25,7 +27,7 @@ export function Location({
       }}
       onPress={onLocationPress}
     >
-      <LocationContainer>
+      <LocationContainer color={color}>
         <Car size={32} color={COLORS.GRAY_100} />
       </LocationContainer>
     </Marker>

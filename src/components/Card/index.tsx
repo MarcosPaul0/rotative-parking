@@ -1,7 +1,5 @@
-import { LinearGradient } from 'expo-linear-gradient';
-import { ReactNode, useContext } from 'react';
-import { ThemeContext } from 'styled-components/native';
-import { SubTitle, TextContainer, Title } from './styles';
+import { ReactNode } from 'react';
+import { CardContainer, SubTitle, TextContainer, Title } from './styles';
 
 interface CardProps {
   title?: string;
@@ -10,23 +8,13 @@ interface CardProps {
 }
 
 export function Card({ title, subtitle, children }: CardProps) {
-  const { COLORS } = useContext(ThemeContext);
-
   return (
-    <LinearGradient
-      colors={[COLORS.GRAY_700, COLORS.GRAY_800]}
-      style={{
-        borderRadius: 10,
-        padding: 18,
-        paddingBottom: 30,
-        marginBottom: 18,
-      }}
-    >
+    <CardContainer>
       <TextContainer>
         {title && <Title>{title}</Title>}
         <SubTitle>{subtitle}</SubTitle>
       </TextContainer>
       {children}
-    </LinearGradient>
+    </CardContainer>
   );
 }

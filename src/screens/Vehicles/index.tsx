@@ -5,19 +5,20 @@ import { useNotify } from '@hooks/useNotify';
 import { apiClient } from '@services/apiClient';
 import { ScreenContainer } from '@styles/defaults';
 import { useEffect, useState } from 'react';
-import { Car } from './components/Car';
-import { RegisterCarModal } from './components/RegisterCarModal';
+import { Vehicle } from './components/Vehicle';
+import { RegisterVehicleModal } from './components/RegisterVehicleModal';
 import { CarsList } from './styles';
 
-export interface CarData {
+export interface VehicleData {
   id: number;
   name: string;
   plate: string;
 }
 
 export function VehiclesScreen() {
-  const [cars, setCars] = useState<CarData[]>([]);
-  const [registerCarModalIsOpen, setRegisterCarModalIsOpen] = useState(false);
+  const [vehicles, setVehicles] = useState<VehicleData[]>([]);
+  const [registerVehicleModalIsOpen, setRegisterVehicleModalIsOpen] =
+    useState(false);
 
   const { user } = useAuthContext();
 
@@ -26,140 +27,78 @@ export function VehiclesScreen() {
   useEffect(() => {
     (async () => {
       try {
-        const { data: cars } = await apiClient.get<CarData[]>(
-          `${ApiRoutes.CARS}/${user!.id}`
+        const response = await apiClient.get<VehicleData[]>(
+          `${ApiRoutes.VEHICLE}/${user!.id}`
         );
 
-        setCars(cars);
+        setVehicles(response.data);
       } catch {
-        setCars([]);
+        setVehicles([]);
       }
     })();
   }, []);
 
-  async function updateCar({ id, name, plate }: CarData) {
+  async function updateVehicle({ id, name, plate }: VehicleData) {
     try {
-      await apiClient.patch(`${ApiRoutes.CARS}/${id}`, {
+      await apiClient.patch(`${ApiRoutes.VEHICLE}/${id}`, {
         name,
         plate,
       });
 
       successNotify({
-        title: 'Carro atualizado',
-        message: 'O carro foi atualizado com sucesso',
+        title: 'Veículo atualizado',
+        message: 'O veículo foi atualizado com sucesso',
       });
     } catch {
       errorNotify({
-        title: 'Erro ao atualizar o carro',
-        message: 'Ocorreu um erro ao atualizar o carro, tente novamente',
+        title: 'Erro ao atualizar o veículo',
+        message: 'Ocorreu um erro ao atualizar o veículo, tente novamente',
       });
     }
   }
 
-  async function deleteCar(cardId: number) {
+  async function deleteVehicle(cardId: number) {
     try {
-      await apiClient.delete(`${ApiRoutes.CARS}/${cardId}`);
+      await apiClient.delete(`${ApiRoutes.VEHICLE}/${cardId}`);
 
       successNotify({
-        title: 'Carro deletado',
-        message: 'O carro foi deletado com sucesso',
+        title: 'Veículo deletado',
+        message: 'O veículo foi deletado com sucesso',
       });
     } catch {
       errorNotify({
-        title: 'Erro ao deletar o carro',
-        message: 'Ocorreu um erro ao deletar o carro, tente novamente',
+        title: 'Erro ao deletar o veículo',
+        message: 'Ocorreu um erro ao deletar o veículo, tente novamente',
       });
     }
   }
 
-  function openRegisterCarModal() {
-    setRegisterCarModalIsOpen(true);
+  function openRegisterVehicleModal() {
+    setRegisterVehicleModalIsOpen(true);
   }
 
-  function closeRegisterCarModal() {
-    setRegisterCarModalIsOpen(false);
+  function closeRegisterVehicleModal() {
+    setRegisterVehicleModalIsOpen(false);
   }
 
   return (
     <ScreenContainer>
-      <Button text="Novo Veículo" onPress={openRegisterCarModal} />
+      <Button text="Novo Veículo" onPress={openRegisterVehicleModal} />
 
-      <RegisterCarModal
-        isOpen={registerCarModalIsOpen}
-        onCloseModal={closeRegisterCarModal}
+      <RegisterVehicleModal
+        isOpen={registerVehicleModalIsOpen}
+        onCloseModal={closeRegisterVehicleModal}
       />
 
       <CarsList>
-        {/* {cars.map((car) => (
-          <Car
-            key={car.id}
-            car={car}
-            onUpdate={updateCar}
-            onDelete={deleteCar}
-          />
-        ))} */}
-        <Car
-          car={{
+        <Vehicle
+          vehicle={{
             id: 12,
             name: 'Carro 1',
             plate: '1234-fed',
           }}
-          onUpdate={updateCar}
-          onDelete={deleteCar}
-        />
-        <Car
-          car={{
-            id: 12,
-            name: 'Carro 2',
-            plate: '4567-oiu',
-          }}
-          onUpdate={updateCar}
-          onDelete={deleteCar}
-        />
-        <Car
-          car={{
-            id: 12,
-            name: 'Carro 3',
-            plate: '1154-qwe',
-          }}
-          onUpdate={updateCar}
-          onDelete={deleteCar}
-        />
-        <Car
-          car={{
-            id: 12,
-            name: 'Carro 3',
-            plate: '1154-qwe',
-          }}
-          onUpdate={updateCar}
-          onDelete={deleteCar}
-        />
-        <Car
-          car={{
-            id: 12,
-            name: 'Carro 3',
-            plate: '1154-qwe',
-          }}
-          onUpdate={updateCar}
-          onDelete={deleteCar}
-        />
-        <Car
-          car={{
-            id: 12,
-            name: 'Carro 3',
-            plate: '1154-qwe',
-          }}
-          onUpdate={updateCar}
-          onDelete={deleteCar}
-        />
-        <Car
-          car={{
-            id: 12,
-            name: 'Carro 3',
-            plate: '1154-qwe',
-          }}
-          onUpdate={updateCar}
-          onDelete={deleteCar}
+          onUpdate={updateVehicle}
+          onDelete={deleteVehicle}
         />
       </CarsList>
     </ScreenContainer>

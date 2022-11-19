@@ -5,7 +5,7 @@ export const ModalContainer = styled.View`
   align-items: center;
   justify-content: center;
   padding: 20px;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.3);
 `;
 
 export const ContentContainer = styled.View`

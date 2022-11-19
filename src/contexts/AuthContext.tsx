@@ -52,7 +52,6 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   useEffect(() => {
     (async () => {
       const token = await AsyncStorage.getItem(StorageItems.TOKEN);
-
       if (token) {
         apiClient.defaults.headers.Authorization = `Bearer ${token}`;
 

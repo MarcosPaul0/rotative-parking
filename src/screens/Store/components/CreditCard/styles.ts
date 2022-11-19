@@ -20,7 +20,7 @@ export const OwnerText = styled(BaseText)`
 export const CreditCardContainer = styled.TouchableOpacity`
   ${({ theme }) => css`
     margin-top: 10px;
-    padding: 10px;
+    padding: 20px 10px;
     border-radius: 10px;
     background: ${theme.COLORS.GRAY_600};
   `}
@@ -36,13 +36,12 @@ export const CreditCardNumber = styled(BaseText)`
 `;
 
 export const LineContainer = styled.View`
-  margin: 0 30px;
+  margin: 0 40px;
   flex-direction: row;
   justify-content: space-between;
 `;
 
 export const ContentContainer = styled.View`
-  padding-right: 20px;
   padding-top: 5px;
 `;
 

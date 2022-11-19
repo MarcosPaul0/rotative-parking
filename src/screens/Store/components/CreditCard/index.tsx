@@ -1,5 +1,4 @@
 import { formatCreditCardNumber } from '@utils/formatCreditCardNumber';
-import { format } from 'date-fns';
 import {
   CreditCardContainer,
   CreditCardNumber,
@@ -38,7 +37,7 @@ export function CreditCard({
         </ContentContainer>
         <ContentContainer>
           <Label>Validade</Label>
-          <Value>{format(new Date(dueDate), 'MM/yy')}</Value>
+          <Value>{dueDate}</Value>
         </ContentContainer>
       </LineContainer>
     </CreditCardContainer>

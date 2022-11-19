@@ -1,24 +1,24 @@
 import { IconButton } from '@components/IconButton';
-import { CarData } from '@screens/Vehicles';
+import { VehicleData } from '@screens/Vehicles';
 import { Pen, Trash } from 'phosphor-react-native';
 import { useContext, useState } from 'react';
 import { ThemeContext } from 'styled-components/native';
-import { UpdateCarModal } from '../UpdateCarModal';
+import { UpdateVehicleModal } from '../UpdateVehicleModal';
 import {
   ButtonsContainer,
-  CarContainer,
-  CarPlate,
-  CarTitle,
+  VehicleContainer,
+  VehiclePlate,
+  VehicleTitle,
   ContentContainer,
 } from './styles';
 
-interface CarProps {
-  car: CarData;
-  onUpdate: (car: CarData) => void;
-  onDelete: (carId: number) => void;
+interface VehicleProps {
+  vehicle: VehicleData;
+  onUpdate: (vehicle: VehicleData) => void;
+  onDelete: (vehicleId: number) => void;
 }
 
-export function Car({ car, onUpdate, onDelete }: CarProps) {
+export function Vehicle({ vehicle, onUpdate, onDelete }: VehicleProps) {
   const { COLORS } = useContext(ThemeContext);
 
   const [updateCarModalIsOpen, setUpdateCarModalIsOpen] = useState(false);
@@ -33,18 +33,18 @@ export function Car({ car, onUpdate, onDelete }: CarProps) {
 
   return (
     <>
-      <UpdateCarModal
-        key={car.id}
-        car={car}
+      <UpdateVehicleModal
+        key={vehicle.id}
+        vehicle={vehicle}
         isOpen={updateCarModalIsOpen}
         onCloseModal={closeUpdateCarModal}
-        onUpdateCar={onUpdate}
+        onUpdateVehicle={onUpdate}
       />
 
-      <CarContainer>
+      <VehicleContainer>
         <ContentContainer>
-          <CarTitle>{car.name}</CarTitle>
-          <CarPlate>{car.plate}</CarPlate>
+          <VehicleTitle>{vehicle.name}</VehicleTitle>
+          <VehiclePlate>{vehicle.plate}</VehiclePlate>
         </ContentContainer>
 
         <ButtonsContainer>
@@ -56,11 +56,11 @@ export function Car({ car, onUpdate, onDelete }: CarProps) {
           <IconButton
             icon={<Trash color={COLORS.GRAY_100} />}
             bgColor="red"
-            onPress={() => onDelete(car.id)}
+            onPress={() => onDelete(vehicle.id)}
             ml={10}
           />
         </ButtonsContainer>
-      </CarContainer>
+      </VehicleContainer>
     </>
   );
 }

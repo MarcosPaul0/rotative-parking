@@ -1,32 +1,32 @@
 import { Button } from '@components/Button';
 import { Input } from '@components/Input';
 import { Modal } from '@components/Modal';
-import { CarData } from '@screens/Vehicles';
+import { VehicleData } from '@screens/Vehicles';
 import { useForm } from 'react-hook-form';
 
-interface UpdateCarModalProps {
-  car: CarData;
-  onUpdateCar: (car: CarData) => void;
+interface UpdateVehicleModalProps {
+  vehicle: VehicleData;
+  onUpdateVehicle: (vehicle: VehicleData) => void;
   isOpen: boolean;
   onCloseModal: () => void;
 }
 
-export function UpdateCarModal({
-  car,
+export function UpdateVehicleModal({
+  vehicle,
   isOpen,
-  onUpdateCar,
+  onUpdateVehicle,
   onCloseModal,
-}: UpdateCarModalProps) {
-  const { control, handleSubmit } = useForm<CarData>({
+}: UpdateVehicleModalProps) {
+  const { control, handleSubmit } = useForm<VehicleData>({
     defaultValues: {
-      id: car.id,
-      name: car.name,
-      plate: car.plate,
+      id: vehicle.id,
+      name: vehicle.name,
+      plate: vehicle.plate,
     },
   });
 
   return (
-    <Modal visible={isOpen} text="Atualize os dados do carro">
+    <Modal visible={isOpen} text="Atualize os dados do veículo">
       <Input
         label="Nome"
         controllerProps={{
@@ -42,7 +42,7 @@ export function UpdateCarModal({
         }}
       />
 
-      <Button text="Atualizar" onPress={handleSubmit(onUpdateCar)} />
+      <Button text="Atualizar" onPress={handleSubmit(onUpdateVehicle)} />
       <Button
         text="Cancelar"
         variant="outlined"
