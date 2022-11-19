@@ -5,29 +5,55 @@ import { ScreenContainer } from '@styles/defaults';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { format, addHours } from 'date-fns';
-import { CreditCardModal } from './components/CreditCardModal';
+import { formatCreditCardNumber } from '@utils/formatCreditCardNumber';
+import {
+  // eslint-disable-next-line no-unused-vars
+  CreditCardData,
+  SelectCreditCardModal,
+} from './components/SelectCreditCardModal';
 import { SwitchSaleType } from './components/SwitchSaleType';
-import { LeftText, LineContainer, RightText } from './styles';
+import {
+  LeftText,
+  LineContainer,
+  RightText,
+  SelectContainer,
+  SelectText,
+} from './styles';
+import {
+  SelectVehicleModal,
+  // eslint-disable-next-line no-unused-vars
+  VehicleData,
+} from './components/SelectVehicleModal';
 
 export interface BuyCreditsData {
   credits: number;
+  vehiclePlate: string;
   type: 'creditCard' | 'pix';
-  creditCardId?: number;
+  cardNumber?: string;
+  securityCode?: number;
+  expirationMonth?: number;
+  expirationYear?: number;
+  cardBrand?: string;
 }
 
 export function StoreScreen() {
-  const [creditCardModalIsOpen, setCreditCardModalIsOpen] = useState(false);
-
   const { setValue, getValues, watch } = useForm<BuyCreditsData>({
     defaultValues: {
       credits: 1,
+      vehiclePlate: '',
       type: 'creditCard',
-      creditCardId: undefined,
+      cardNumber: '',
+      securityCode: 0,
+      expirationMonth: 0,
+      expirationYear: 0,
+      cardBrand: '',
     },
   });
 
   const typeWatched = watch('type');
   const creditsWatched = watch('credits');
+  const creditCardNumberWatched = watch('cardNumber');
+  const vehiclePlateWatched = watch('vehiclePlate');
 
   const creditsTotal = (creditsWatched * 7.5).toFixed(2).replace('.', ',');
   const finalDate = format(
@@ -51,13 +77,36 @@ export function StoreScreen() {
     setValue('credits', currentCredit - 1);
   }
 
+  const [creditCardModalIsOpen, setCreditCardModalIsOpen] = useState(false);
+
   function handleOpenCreditCardModal() {
     setCreditCardModalIsOpen(true);
   }
 
-  function selectCreditCard(creditCardId: number) {
-    setValue('creditCardId', creditCardId);
+  function selectCreditCard({
+    number,
+    cvc,
+    expirationMonth,
+    expirationYear,
+    flag,
+  }: CreditCardData) {
+    setValue('cardNumber', number);
+    setValue('securityCode', cvc);
+    setValue('expirationMonth', expirationMonth);
+    setValue('expirationYear', expirationYear);
+    setValue('cardBrand', flag);
     setCreditCardModalIsOpen(false);
+  }
+
+  const [vehicleModalIsOpen, setVehicleModalIsOpen] = useState(false);
+
+  function handleOpenVehicleModal() {
+    setVehicleModalIsOpen(true);
+  }
+
+  function selectVehiclePlate({ plate }: VehicleData) {
+    setValue('vehiclePlate', plate);
+    setVehicleModalIsOpen(false);
   }
 
   return (
@@ -90,15 +139,33 @@ export function StoreScreen() {
 
         {typeWatched === 'creditCard' ? (
           <>
-            <CreditCardModal
+            <SelectCreditCardModal
               isOpen={creditCardModalIsOpen}
               selectCreditCard={selectCreditCard}
             />
-            <Button
-              text="Selecionar Cartão"
-              onPress={handleOpenCreditCardModal}
-              mt={10}
+
+            <SelectContainer onPress={handleOpenCreditCardModal}>
+              {creditCardNumberWatched ? (
+                <SelectText>
+                  {formatCreditCardNumber(creditCardNumberWatched)}
+                </SelectText>
+              ) : (
+                <SelectText>Selecionar Cartão</SelectText>
+              )}
+            </SelectContainer>
+
+            <SelectVehicleModal
+              isOpen={vehicleModalIsOpen}
+              selectVehiclePlate={selectVehiclePlate}
             />
+
+            <SelectContainer onPress={handleOpenVehicleModal}>
+              {vehiclePlateWatched ? (
+                <SelectText>{vehiclePlateWatched}</SelectText>
+              ) : (
+                <SelectText>Selecionar Veículo</SelectText>
+              )}
+            </SelectContainer>
           </>
         ) : null}
 

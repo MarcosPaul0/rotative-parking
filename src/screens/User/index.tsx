@@ -13,6 +13,7 @@ import { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { ThemeContext } from 'styled-components/native';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
+import { Roles } from '@enums/roles.enum';
 
 interface UpdateUserData {
   name: string;
@@ -125,11 +126,13 @@ export function UserScreen() {
           }}
         />
 
-        <Button
-          text="Atualizar"
-          onPress={handleSubmit(updateUser)}
-          isLoading={isSubmitting}
-        />
+        {user?.role === Roles.ADMIN && (
+          <Button
+            text="Atualizar"
+            onPress={handleSubmit(updateUser)}
+            isLoading={isSubmitting}
+          />
+        )}
 
         <Button
           text="Deletar perfil"

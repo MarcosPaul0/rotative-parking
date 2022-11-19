@@ -18,11 +18,13 @@ interface CreditCardFormData {
 interface RegisterCreditCardModalProps {
   isOpen: boolean;
   closeModal: () => void;
+  refetchCreditCards: () => void;
 }
 
 export function RegisterCreditCardModal({
   isOpen,
   closeModal,
+  refetchCreditCards,
 }: RegisterCreditCardModalProps) {
   const { errorNotify, successNotify } = useNotify();
 
@@ -65,6 +67,7 @@ export function RegisterCreditCardModal({
       });
 
       reset();
+      refetchCreditCards();
       closeModal();
     } catch (error) {
       errorNotify({

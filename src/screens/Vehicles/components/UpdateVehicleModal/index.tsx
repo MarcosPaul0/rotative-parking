@@ -1,22 +1,26 @@
 import { Button } from '@components/Button';
 import { Input } from '@components/Input';
+import { MaskedInput } from '@components/MaskedInput';
 import { Modal } from '@components/Modal';
+import { ApiRoutes } from '@enums/apiRoutes.enum';
+import { useNotify } from '@hooks/useNotify';
 import { VehicleData } from '@screens/Vehicles';
+import { apiClient } from '@services/apiClient';
 import { useForm } from 'react-hook-form';
 
 interface UpdateVehicleModalProps {
   vehicle: VehicleData;
-  onUpdateVehicle: (vehicle: VehicleData) => void;
   isOpen: boolean;
-  onCloseModal: () => void;
+  closeModal: () => void;
 }
 
 export function UpdateVehicleModal({
   vehicle,
   isOpen,
-  onUpdateVehicle,
-  onCloseModal,
+  closeModal,
 }: UpdateVehicleModalProps) {
+  const { errorNotify, successNotify } = useNotify();
+
   const { control, handleSubmit } = useForm<VehicleData>({
     defaultValues: {
       id: vehicle.id,
@@ -24,6 +28,26 @@ export function UpdateVehicleModal({
       plate: vehicle.plate,
     },
   });
+
+  async function updateVehicle({ id, name, plate }: VehicleData) {
+    try {
+      await apiClient.patch(`${ApiRoutes.VEHICLE}/${id}`, {
+        name,
+        plate,
+      });
+
+      successNotify({
+        title: 'Veículo atualizado',
+        message: 'O veículo foi atualizado com sucesso',
+      });
+      closeModal();
+    } catch {
+      errorNotify({
+        title: 'Erro ao atualizar o veículo',
+        message: 'Ocorreu um erro ao atualizar o veículo, tente novamente',
+      });
+    }
+  }
 
   return (
     <Modal visible={isOpen} text="Atualize os dados do veículo">
@@ -34,7 +58,8 @@ export function UpdateVehicleModal({
           name: 'name',
         }}
       />
-      <Input
+      <MaskedInput
+        mask="AAA-9999"
         label="Placa"
         controllerProps={{
           control,
@@ -42,12 +67,12 @@ export function UpdateVehicleModal({
         }}
       />
 
-      <Button text="Atualizar" onPress={handleSubmit(onUpdateVehicle)} />
+      <Button text="Atualizar" onPress={handleSubmit(updateVehicle)} />
       <Button
         text="Cancelar"
         variant="outlined"
         bgColor="red"
-        onPress={onCloseModal}
+        onPress={closeModal}
         mt={10}
       />
     </Modal>

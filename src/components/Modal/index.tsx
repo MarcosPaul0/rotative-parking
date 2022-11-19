@@ -27,6 +27,7 @@ export function Modal({
             borderRadius: 10,
             padding: 20,
             width: '100%',
+            maxHeight: '80%',
           }}
           colors={[COLORS.GRAY_700, COLORS.GRAY_800]}
         >

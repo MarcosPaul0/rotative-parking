@@ -6,4 +6,5 @@ export enum ApiRoutes {
   CREDIT_CARD = '/credit-cards',
   CREDIT_CARDS_BY_USER = '/credit-cards/user',
   LOCATION = '/location',
+  PAYMENTS = '/payments',
 }

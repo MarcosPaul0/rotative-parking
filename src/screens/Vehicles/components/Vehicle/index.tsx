@@ -1,5 +1,8 @@
 import { IconButton } from '@components/IconButton';
+import { ApiRoutes } from '@enums/apiRoutes.enum';
+import { useNotify } from '@hooks/useNotify';
 import { VehicleData } from '@screens/Vehicles';
+import { apiClient } from '@services/apiClient';
 import { Pen, Trash } from 'phosphor-react-native';
 import { useContext, useState } from 'react';
 import { ThemeContext } from 'styled-components/native';
@@ -14,12 +17,28 @@ import {
 
 interface VehicleProps {
   vehicle: VehicleData;
-  onUpdate: (vehicle: VehicleData) => void;
-  onDelete: (vehicleId: number) => void;
 }
 
-export function Vehicle({ vehicle, onUpdate, onDelete }: VehicleProps) {
+export function Vehicle({ vehicle }: VehicleProps) {
   const { COLORS } = useContext(ThemeContext);
+
+  const { errorNotify, successNotify } = useNotify();
+
+  async function deleteVehicle(cardId: number) {
+    try {
+      await apiClient.delete(`${ApiRoutes.VEHICLE}/${cardId}`);
+
+      successNotify({
+        title: 'Veículo deletado',
+        message: 'O veículo foi deletado com sucesso',
+      });
+    } catch {
+      errorNotify({
+        title: 'Erro ao deletar o veículo',
+        message: 'Ocorreu um erro ao deletar o veículo, tente novamente',
+      });
+    }
+  }
 
   const [updateCarModalIsOpen, setUpdateCarModalIsOpen] = useState(false);
 
@@ -37,8 +56,7 @@ export function Vehicle({ vehicle, onUpdate, onDelete }: VehicleProps) {
         key={vehicle.id}
         vehicle={vehicle}
         isOpen={updateCarModalIsOpen}
-        onCloseModal={closeUpdateCarModal}
-        onUpdateVehicle={onUpdate}
+        closeModal={closeUpdateCarModal}
       />
 
       <VehicleContainer>
@@ -56,7 +74,7 @@ export function Vehicle({ vehicle, onUpdate, onDelete }: VehicleProps) {
           <IconButton
             icon={<Trash color={COLORS.GRAY_100} />}
             bgColor="red"
-            onPress={() => onDelete(vehicle.id)}
+            onPress={() => deleteVehicle(vehicle.id)}
             ml={10}
           />
         </ButtonsContainer>

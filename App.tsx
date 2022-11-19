@@ -8,6 +8,8 @@ import {
 import { Loading } from '@components/Loading';
 import { StatusBar } from 'react-native';
 import { RouterProvider } from '@routes/Router';
+import { QueryClientProvider } from 'react-query';
+import { queryClient } from '@services/queryClient';
 import theme from './src/theme/index';
 
 export default function App() {
@@ -18,17 +20,19 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      {fontsLoaded ? (
-        <>
-          <StatusBar
-            barStyle="light-content"
-            backgroundColor={theme.COLORS.GRAY_700}
-          />
-          <RouterProvider />
-        </>
-      ) : (
-        <Loading />
-      )}
+      <QueryClientProvider client={queryClient}>
+        {fontsLoaded ? (
+          <>
+            <StatusBar
+              barStyle="light-content"
+              backgroundColor={theme.COLORS.GRAY_700}
+            />
+            <RouterProvider />
+          </>
+        ) : (
+          <Loading />
+        )}
+      </QueryClientProvider>
     </ThemeProvider>
   );
 }

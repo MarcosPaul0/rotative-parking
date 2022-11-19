@@ -3,11 +3,13 @@ import { Modal } from '@components/Modal';
 import { useAuthContext } from '@contexts/AuthContext';
 import { ApiRoutes } from '@enums/apiRoutes.enum';
 import { apiClient } from '@services/apiClient';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { ScrollView } from 'react-native';
+import { useQuery } from 'react-query';
 import { CreditCard } from '../CreditCard';
 import { RegisterCreditCardModal } from '../RegisterCreditCardModal';
 
-interface CreditCardApiResponse {
+export interface CreditCardData {
   created_at: string;
   cvc: number;
   deleted_at: string | null;
@@ -17,34 +19,41 @@ interface CreditCardApiResponse {
   number: string;
   ownerId: number;
   updated_at: string;
+  flag: string;
 }
 
-interface CreditCardModalProps {
+interface SelectCreditCardModalProps {
   isOpen: boolean;
-  selectCreditCard: (creditCardId: number) => void;
+  selectCreditCard: (creditCardData: CreditCardData) => void;
 }
 
-export function CreditCardModal({
+export function SelectCreditCardModal({
   isOpen,
   selectCreditCard,
-}: CreditCardModalProps) {
+}: SelectCreditCardModalProps) {
   const { user } = useAuthContext();
 
-  const [creditCards, setCreditsCards] = useState<CreditCardApiResponse[]>([]);
-
-  useEffect(() => {
-    (async () => {
+  const { data: creditCards, refetch } = useQuery<CreditCardData[]>(
+    ['creditCards'],
+    async () => {
       try {
-        const response = await apiClient.get<CreditCardApiResponse[]>(
+        const response = await apiClient.get<CreditCardData[]>(
           `${ApiRoutes.CREDIT_CARDS_BY_USER}/${user!.id}`
         );
 
-        setCreditsCards(response.data);
+        return response.data;
       } catch {
-        setCreditsCards([]);
+        return [];
       }
-    })();
-  }, []);
+    },
+    {
+      initialData: [],
+    }
+  );
+
+  function refetchCreditCards() {
+    refetch();
+  }
 
   const [registerCreditCardModalIsOpen, setRegisterCreditCardModalIsOpen] =
     useState(false);
@@ -62,6 +71,7 @@ export function CreditCardModal({
       <RegisterCreditCardModal
         isOpen={registerCreditCardModalIsOpen}
         closeModal={closeRegisterCreditCardModal}
+        refetchCreditCards={refetchCreditCards}
       />
       <Modal
         text="Selecione um cartão para realizar a compra de créditos"
@@ -73,20 +83,22 @@ export function CreditCardModal({
           onPress={openRegisterCreditCardModal}
         />
 
-        {creditCards.map((creditCard) => {
-          const formattedDate = `${creditCard.expirationMonth}/${creditCard.expirationYear}`;
+        <ScrollView>
+          {creditCards!.map((creditCard) => {
+            const formattedDate = `${creditCard.expirationMonth}/${creditCard.expirationYear}`;
 
-          return (
-            <CreditCard
-              key={creditCard.id}
-              owner={user!.name}
-              number={creditCard.number}
-              cvc={String(creditCard.cvc)}
-              dueDate={formattedDate}
-              onSelectCard={() => selectCreditCard(creditCard.id)}
-            />
-          );
-        })}
+            return (
+              <CreditCard
+                key={creditCard.id}
+                owner={user!.name}
+                number={creditCard.number}
+                cvc={String(creditCard.cvc)}
+                dueDate={formattedDate}
+                onSelectCard={() => selectCreditCard(creditCard)}
+              />
+            );
+          })}
+        </ScrollView>
       </Modal>
     </>
   );
