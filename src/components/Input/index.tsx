@@ -27,7 +27,7 @@ type ControllerProps<
 };
 
 export interface InputProps {
-  label: string;
+  label?: string;
   errorMessage?: string;
   inputProps?: TextInputProps;
   controllerProps: ControllerProps;

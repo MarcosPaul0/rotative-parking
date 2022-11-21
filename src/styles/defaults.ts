@@ -23,5 +23,5 @@ export const ScrollContainer = styled.ScrollView`
 
 export const ScrollScreenContainer = styled.ScrollView`
   flex: 1;
-  padding: 0 18px;
+  padding: 18px;
 `;

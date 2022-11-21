@@ -4,7 +4,7 @@ export const CardContainer = styled.View`
   ${({ theme }) => css`
     padding: 18px;
     padding-bottom: 30px;
-    margin-bottom: 18px;
+    margin-bottom: 36px;
     background: ${theme.COLORS.GRAY_800};
     border-radius: 10px;
   `}

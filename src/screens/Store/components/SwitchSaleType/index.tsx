@@ -1,4 +1,4 @@
-import { BuyCreditsData } from '@screens/Store';
+import { PaymentFormData } from '@screens/Store';
 import { CreditCard } from 'phosphor-react-native';
 import { useContext } from 'react';
 import { UseFormSetValue } from 'react-hook-form';
@@ -12,7 +12,7 @@ import {
 } from './styles';
 
 interface SwitchSaleTypeProps {
-  setValue: UseFormSetValue<BuyCreditsData>;
+  setValue: UseFormSetValue<PaymentFormData>;
   type: 'creditCard' | 'pix';
 }
 
