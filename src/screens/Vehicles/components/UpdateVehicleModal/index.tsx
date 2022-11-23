@@ -12,12 +12,14 @@ interface UpdateVehicleModalProps {
   vehicle: VehicleData;
   isOpen: boolean;
   closeModal: () => void;
+  refetchVehicles: () => void;
 }
 
 export function UpdateVehicleModal({
   vehicle,
   isOpen,
   closeModal,
+  refetchVehicles,
 }: UpdateVehicleModalProps) {
   const { errorNotify, successNotify } = useNotify();
 
@@ -25,17 +27,18 @@ export function UpdateVehicleModal({
     defaultValues: {
       id: vehicle.id,
       name: vehicle.name,
-      plate: vehicle.plate,
+      license_plate: vehicle.license_plate,
     },
   });
 
-  async function updateVehicle({ id, name, plate }: VehicleData) {
+  async function updateVehicle({ id, name, license_plate }: VehicleData) {
     try {
       await apiClient.patch(`${ApiRoutes.VEHICLE}/${id}`, {
         name,
-        plate,
+        license_plate,
       });
 
+      refetchVehicles();
       successNotify({
         title: 'Veículo atualizado',
         message: 'O veículo foi atualizado com sucesso',
@@ -63,7 +66,7 @@ export function UpdateVehicleModal({
         label="Placa"
         controllerProps={{
           control,
-          name: 'plate',
+          name: 'license_plate',
         }}
       />
 

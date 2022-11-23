@@ -12,9 +12,11 @@ import { ViewContainer } from '@styles/defaults';
 import { useForm, FormProvider } from 'react-hook-form';
 import { Map } from '@enums/map.enum';
 import { Location } from '@screens/Admin/components/Location';
-import { formatPrice } from '@utils/formatPrice';
 import { Button } from '@components/Button';
 import { initialLocation } from '@utils/initialLocation';
+import { useQuery } from 'react-query';
+import { apiClient } from '@services/apiClient';
+import { ApiRoutes } from '@enums/apiRoutes.enum';
 import { LocationModal } from './components/LocationModal';
 import { ButtonContainer } from './styles';
 import { AddLocationModal } from './components/AddLocationModal';
@@ -23,8 +25,8 @@ export interface RegisterLocationData {
   latitude: number;
   longitude: number;
   name: string;
-  price: number;
-  vacancies: number;
+  price: string;
+  vacancies: string;
 }
 
 export interface NewLocation {
@@ -34,30 +36,35 @@ export interface NewLocation {
 
 export interface Location extends NewLocation {
   id: number;
-  name: string;
+  region: string;
   price: number;
-  vacancies: number;
+  parking_lots: number;
 }
 
 export function AdminScreen() {
-  const [markers, setMarkers] = useState<Location[]>([
-    {
-      id: 1,
-      latitude: initialLocation.coords.latitude,
-      longitude: initialLocation.coords.longitude,
-      name: 'Inicio',
-      price: 7.5,
-      vacancies: 12,
-    },
-  ]);
+  const { data: regions, refetch } = useQuery<Location[]>(
+    ['regions'],
+    async () => {
+      try {
+        const response = await apiClient.get<Location[]>(ApiRoutes.REGIONS);
 
-  const [markerActive, setMarkerActive] = useState<Location>({
+        return response.data;
+      } catch {
+        return [];
+      }
+    },
+    {
+      initialData: [] as Location[],
+    }
+  );
+
+  const [activeMarker, setActiveMarker] = useState<Location>({
     id: 1,
     latitude: initialLocation.coords.latitude,
     longitude: initialLocation.coords.longitude,
-    name: 'Inicio',
+    region: 'Inicio',
     price: 7.5,
-    vacancies: 12,
+    parking_lots: 12,
   });
   const [location, setLocation] = useState<LocationObject | null>(null);
   const [newLocation, setNewLocation] = useState<NewLocation | null>(null);
@@ -82,8 +89,8 @@ export function AdminScreen() {
       latitude: 0,
       longitude: 0,
       name: '',
-      price: 0,
-      vacancies: 0,
+      price: '',
+      vacancies: '',
     },
   });
 
@@ -100,7 +107,7 @@ export function AdminScreen() {
   }
 
   function handlePressLocation(location: Location) {
-    setMarkerActive(location);
+    setActiveMarker(location);
     openLocationModal();
   }
 
@@ -125,20 +132,25 @@ export function AdminScreen() {
     });
   }
 
+  function refetchRegions() {
+    refetch();
+    setNewLocation(null);
+  }
+
   return (
     <FormProvider {...formMethods}>
       <ViewContainer>
         <LocationModal
           isOpen={locationModalIsOpen}
-          name={markerActive!.name}
-          price={formatPrice(markerActive!.price)}
-          vacancies={markerActive!.vacancies}
+          location={activeMarker}
           handleClose={handleCloseLocationModal}
+          refetchRegions={refetchRegions}
         />
 
         <AddLocationModal
           isOpen={addLocationModalIsOpen}
           handleClose={handleCloseAddLocationModal}
+          refetchRegions={refetchRegions}
         />
 
         <ButtonContainer>
@@ -168,7 +180,7 @@ export function AdminScreen() {
           maxZoomLevel={18}
           onPress={handleSelectLocation}
         >
-          {markers.map((location) => (
+          {regions?.map((location) => (
             <Location
               key={location.id}
               latitude={location.latitude}

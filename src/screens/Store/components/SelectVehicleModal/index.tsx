@@ -9,7 +9,7 @@ import { Vehicle } from './components/Vehicle';
 export interface VehicleData {
   id: number;
   name: string;
-  plate: string;
+  license_plate: string;
 }
 
 interface SelectVehicleModalProps {

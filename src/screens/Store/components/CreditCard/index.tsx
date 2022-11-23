@@ -10,7 +10,7 @@ import {
 } from './styles';
 
 interface CreditCardProps {
-  owner: string;
+  cardName: string;
   number: string;
   dueDate: string;
   cvc: string;
@@ -18,7 +18,7 @@ interface CreditCardProps {
 }
 
 export function CreditCard({
-  owner,
+  cardName,
   number,
   dueDate,
   cvc,
@@ -26,7 +26,7 @@ export function CreditCard({
 }: CreditCardProps) {
   return (
     <CreditCardContainer onPress={onSelectCard}>
-      <OwnerText>{owner}</OwnerText>
+      <OwnerText>{cardName}</OwnerText>
 
       <CreditCardNumber>{formatCreditCardNumber(number)}</CreditCardNumber>
 

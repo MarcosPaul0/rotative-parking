@@ -26,7 +26,9 @@ export function BuyByCreditCard() {
     expirationMonth,
     expirationYear,
     flag,
+    cardName,
   }: CreditCardData) {
+    setValue('cardHolderName', cardName);
     setValue('cardNumber', number);
     setValue('securityCode', cvc);
     setValue('expirationMonth', expirationMonth);

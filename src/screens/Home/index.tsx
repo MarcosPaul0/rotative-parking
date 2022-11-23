@@ -38,9 +38,11 @@ export function HomeScreen() {
           height: Dimensions.get('window').height * 0.65,
         }}
         region={{
-          latitude: location?.coords.latitude || -22.4125,
+          latitude:
+            location?.coords.latitude || initialLocation.coords.latitude,
           latitudeDelta: 0.0922,
-          longitude: location?.coords.longitude || -45.7972,
+          longitude:
+            location?.coords.longitude || initialLocation.coords.longitude,
           longitudeDelta: 0.0421,
         }}
         followsUserLocation

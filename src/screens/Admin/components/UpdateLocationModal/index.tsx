@@ -5,69 +5,70 @@ import { ApiRoutes } from '@enums/apiRoutes.enum';
 import { Patterns } from '@enums/patterns.enum';
 import { Validations } from '@enums/validations.enum';
 import { useNotify } from '@hooks/useNotify';
-import { RegisterLocationData } from '@screens/Admin';
+import { Location } from '@screens/Admin';
 import { apiClient } from '@services/apiClient';
-import { useFormContext } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 
-interface AddLocationModalProps {
+interface UpdateLocationData {
+  region: string;
+  price: string;
+  parking_lots: string;
+}
+
+interface UpdateLocationModalProps {
   isOpen: boolean;
+  location: Location;
   handleClose: () => void;
   refetchRegions: () => void;
 }
 
-export function AddLocationModal({
+export function UpdateLocationModal({
   isOpen,
+  location,
   handleClose,
   refetchRegions,
-}: AddLocationModalProps) {
+}: UpdateLocationModalProps) {
   const { successNotify, errorNotify } = useNotify();
 
   const {
-    control,
-    handleSubmit,
-    reset,
-    formState: { isSubmitting, errors },
-  } = useFormContext<RegisterLocationData>();
+    control: updateLocationControl,
+    handleSubmit: handleSubmitUpdateLocation,
+    reset: updateLocationReset,
+    formState: {
+      isSubmitting: updateLocationIsSubmitting,
+      errors: updateLocationErrors,
+    },
+  } = useForm<UpdateLocationData>({
+    defaultValues: {
+      region: location.region,
+      price: String(location.price),
+      parking_lots: String(location.parking_lots),
+    },
+  });
 
-  async function registerLocation({
-    latitude,
-    longitude,
-    name,
+  async function updateLocation({
+    parking_lots,
+    region,
     price,
-    vacancies,
-  }: RegisterLocationData) {
-    if (!latitude || !longitude) {
-      reset();
-      handleClose();
-
-      errorNotify({
-        title: 'Erro no Registro',
-        message: 'Seleciona uma nova localização primeiro!',
-      });
-
-      return;
-    }
-
+  }: UpdateLocationData) {
     try {
-      await apiClient.post(ApiRoutes.REGIONS, {
-        latitude,
-        longitude,
-        region: name,
+      await apiClient.patch(`${ApiRoutes.REGIONS}/${location.id}`, {
+        region,
         price: +price.replace(',', '.'),
-        parking_lots: +vacancies,
+        parking_lots: +parking_lots,
       });
 
       successNotify({
-        title: 'Região Cadastrada',
-        message: 'Nova região registrada com sucesso!',
+        title: 'Região Atualizada',
+        message: 'Os dados da região foram atualizados com sucesso!',
       });
-      reset();
+      updateLocationReset();
       refetchRegions();
       handleClose();
     } catch (error) {
       errorNotify({
-        title: 'Erro no Cadastro',
-        message: 'Erro ao registrar nova região, tente novamente!',
+        title: 'Erro ao Atualizar',
+        message: 'Erro ao atualizar a região, tente novamente!',
       });
     }
   }
@@ -85,19 +86,19 @@ export function AddLocationModal({
       <Input
         label="Região"
         controllerProps={{
-          control,
-          name: 'name',
+          control: updateLocationControl,
+          name: 'region',
           rules: {
             required: requiredValidation,
           },
         }}
-        errorMessage={errors.name?.message}
+        errorMessage={updateLocationErrors.region?.message}
       />
 
       <Input
         label="Preço"
         controllerProps={{
-          control,
+          control: updateLocationControl,
           name: 'price',
           rules: {
             required: requiredValidation,
@@ -107,14 +108,14 @@ export function AddLocationModal({
             },
           },
         }}
-        errorMessage={errors.price?.message}
+        errorMessage={updateLocationErrors.price?.message}
       />
 
       <Input
         label="Vagas"
         controllerProps={{
-          control,
-          name: 'vacancies',
+          control: updateLocationControl,
+          name: 'parking_lots',
           rules: {
             required: requiredValidation,
             pattern: {
@@ -123,13 +124,13 @@ export function AddLocationModal({
             },
           },
         }}
-        errorMessage={errors.vacancies?.message}
+        errorMessage={updateLocationErrors.parking_lots?.message}
       />
 
       <Button
-        text="Adicionar Região"
-        onPress={handleSubmit(registerLocation)}
-        isLoading={isSubmitting}
+        text="Atualizar Região"
+        onPress={handleSubmitUpdateLocation(updateLocation)}
+        isLoading={updateLocationIsSubmitting}
       />
       <Button
         text="Cancelar"

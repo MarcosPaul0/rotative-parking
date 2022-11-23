@@ -10,7 +10,7 @@ export function Vehicle({ vehicle, onSelectVehicle }: VehicleProps) {
   return (
     <ContentContainer onPress={() => onSelectVehicle(vehicle)}>
       <VehicleTitle>{vehicle.name}</VehicleTitle>
-      <VehiclePlate>{vehicle.plate}</VehiclePlate>
+      <VehiclePlate>{vehicle.license_plate}</VehiclePlate>
     </ContentContainer>
   );
 }

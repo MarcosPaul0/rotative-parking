@@ -1,5 +1,4 @@
 import { Button } from '@components/Button';
-import { useAuthContext } from '@contexts/AuthContext';
 import { ApiRoutes } from '@enums/apiRoutes.enum';
 import { apiClient } from '@services/apiClient';
 import { ScreenContainer } from '@styles/defaults';
@@ -12,21 +11,19 @@ import { CarsList } from './styles';
 export interface VehicleData {
   id: number;
   name: string;
-  plate: string;
+  license_plate: string;
 }
 
 export function VehiclesScreen() {
   const [registerVehicleModalIsOpen, setRegisterVehicleModalIsOpen] =
     useState(false);
 
-  const { user } = useAuthContext();
-
-  const { data: vehicles } = useQuery<VehicleData[]>(
+  const { data: vehicles, refetch } = useQuery<VehicleData[]>(
     ['vehicles'],
     async () => {
       try {
         const response = await apiClient.get<VehicleData[]>(
-          `${ApiRoutes.VEHICLE}/${user!.id}`
+          ApiRoutes.MY_VEHICLES
         );
 
         return response.data;
@@ -38,6 +35,10 @@ export function VehiclesScreen() {
       initialData: [],
     }
   );
+
+  function refetchVehicles() {
+    refetch();
+  }
 
   function openRegisterVehicleModal() {
     setRegisterVehicleModalIsOpen(true);
@@ -52,6 +53,7 @@ export function VehiclesScreen() {
       <Button text="Novo Veículo" onPress={openRegisterVehicleModal} />
 
       <RegisterVehicleModal
+        refetchVehicles={refetchVehicles}
         isOpen={registerVehicleModalIsOpen}
         closeModal={closeRegisterVehicleModal}
       />
@@ -62,8 +64,9 @@ export function VehiclesScreen() {
             vehicle={{
               id: vehicle.id,
               name: vehicle.name,
-              plate: vehicle.plate,
+              license_plate: vehicle.license_plate,
             }}
+            refetchVehicles={refetchVehicles}
           />
         ))}
       </CarsList>

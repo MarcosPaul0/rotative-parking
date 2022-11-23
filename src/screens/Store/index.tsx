@@ -27,6 +27,7 @@ import {
   SelectText,
 } from './styles';
 import { SwitchSaleType } from './components/SwitchSaleType';
+import { RegionData, SelectRegionModal } from './components/SelectRegionModal';
 
 export interface PaymentFormData {
   credits: number;
@@ -38,6 +39,8 @@ export interface PaymentFormData {
   expirationYear?: number;
   cardBrand?: string;
   description: string;
+  cardHolderName?: string;
+  region: number;
 }
 
 export function StoreScreen() {
@@ -51,11 +54,13 @@ export function StoreScreen() {
       vehiclePlate: '',
       type: 'creditCard',
       cardNumber: '',
+      cardHolderName: '',
       securityCode: 0,
       expirationMonth: 0,
       expirationYear: 0,
       cardBrand: '',
       description: '',
+      region: undefined,
     },
   });
 
@@ -72,6 +77,7 @@ export function StoreScreen() {
   const typeWatched = watch('type');
   const creditsWatched = watch('credits');
   const vehiclePlateWatched = watch('vehiclePlate');
+  const regionWatched = watch('region');
 
   const finalDate = format(
     addHours(new Date(), creditsWatched),
@@ -107,6 +113,7 @@ export function StoreScreen() {
     expirationYear,
     cardBrand,
     description,
+    cardHolderName,
   }: PaymentFormData) {
     try {
       const pixPaymentData = {
@@ -123,12 +130,12 @@ export function StoreScreen() {
         ...pixPaymentData,
         card_info: {
           card_number: cardNumber?.replace(/\s/g, ''),
-          card_holder_name: user?.name,
           card_holder_cpf: user?.cpf,
           securityCode,
           expiration_month: expirationMonth,
           expiration_year: expirationYear,
           card_brand: cardBrand,
+          card_holder_name: cardHolderName,
         },
         installments: 1,
       };
@@ -160,9 +167,22 @@ export function StoreScreen() {
     setVehicleModalIsOpen(true);
   }
 
-  function selectVehiclePlate({ plate }: VehicleData) {
-    setValue('vehiclePlate', plate);
+  function selectVehiclePlate({ license_plate }: VehicleData) {
+    setValue('vehiclePlate', license_plate);
     setVehicleModalIsOpen(false);
+  }
+
+  const [selectRegionModalIsOpen, setSelectRegionModalIsOpen] = useState(false);
+  const [activeRegion, setActiveRegion] = useState<RegionData | null>(null);
+
+  function handleOpenRegionModal() {
+    setSelectRegionModalIsOpen(true);
+  }
+
+  function selectRegion(region: RegionData) {
+    setValue('region', region.id);
+    setActiveRegion(region);
+    setSelectRegionModalIsOpen(false);
   }
 
   return (
@@ -191,8 +211,25 @@ export function StoreScreen() {
 
           <LineContainer>
             <LeftText>Total</LeftText>
-            <RightText>{formatPrice(creditsWatched * 7.5)}</RightText>
+            <RightText>
+              {activeRegion
+                ? formatPrice(creditsWatched * activeRegion.price)
+                : 'Selecione uma região'}
+            </RightText>
           </LineContainer>
+
+          <SelectRegionModal
+            isOpen={selectRegionModalIsOpen}
+            selectRegion={selectRegion}
+          />
+
+          <SelectContainer onPress={handleOpenRegionModal}>
+            {regionWatched ? (
+              <SelectText>{activeRegion!.name}</SelectText>
+            ) : (
+              <SelectText>Selecionar região</SelectText>
+            )}
+          </SelectContainer>
 
           {typeWatched === 'creditCard' && <BuyByCreditCard />}
 

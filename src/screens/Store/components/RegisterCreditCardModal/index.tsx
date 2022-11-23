@@ -1,4 +1,5 @@
 import { Button } from '@components/Button';
+import { Input } from '@components/Input';
 import { MaskedInput } from '@components/MaskedInput';
 import { Modal } from '@components/Modal';
 import { useAuthContext } from '@contexts/AuthContext';
@@ -9,8 +10,8 @@ import { apiClient } from '@services/apiClient';
 import { useForm } from 'react-hook-form';
 
 interface CreditCardFormData {
+  cardName: string;
   number: string;
-  name: string;
   cvc: string;
   validity: string;
 }
@@ -37,6 +38,7 @@ export function RegisterCreditCardModal({
     formState: { isSubmitting, errors },
   } = useForm<CreditCardFormData>({
     defaultValues: {
+      cardName: '',
       number: '',
       validity: '',
       cvc: '',
@@ -44,6 +46,7 @@ export function RegisterCreditCardModal({
   });
 
   async function registerCreditCard({
+    cardName,
     number,
     cvc,
     validity,
@@ -55,6 +58,7 @@ export function RegisterCreditCardModal({
     try {
       await apiClient.post(ApiRoutes.CREDIT_CARD, {
         ownerId: user!.id,
+        cardName,
         number: number.replace(/\s/g, ''),
         expirationMonth,
         expirationYear,
@@ -90,6 +94,18 @@ export function RegisterCreditCardModal({
       animationType="fade"
       visible={isOpen}
     >
+      <Input
+        label="Nome no cartão"
+        controllerProps={{
+          control,
+          name: 'cardName',
+          rules: {
+            required: requiredRule,
+          },
+        }}
+        errorMessage={errors.cardName?.message}
+      />
+
       <MaskedInput
         mask="9999 9999 9999 9999"
         label="Número do cartão"
@@ -129,7 +145,7 @@ export function RegisterCreditCardModal({
         label="Validade"
         controllerProps={{
           control,
-          name: 'name',
+          name: 'validity',
           rules: {
             required: requiredRule,
             minLength: {

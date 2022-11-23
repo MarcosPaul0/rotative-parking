@@ -17,9 +17,10 @@ import {
 
 interface VehicleProps {
   vehicle: VehicleData;
+  refetchVehicles: () => void;
 }
 
-export function Vehicle({ vehicle }: VehicleProps) {
+export function Vehicle({ vehicle, refetchVehicles }: VehicleProps) {
   const { COLORS } = useContext(ThemeContext);
 
   const { errorNotify, successNotify } = useNotify();
@@ -28,6 +29,7 @@ export function Vehicle({ vehicle }: VehicleProps) {
     try {
       await apiClient.delete(`${ApiRoutes.VEHICLE}/${cardId}`);
 
+      refetchVehicles();
       successNotify({
         title: 'Veículo deletado',
         message: 'O veículo foi deletado com sucesso',
@@ -57,12 +59,13 @@ export function Vehicle({ vehicle }: VehicleProps) {
         vehicle={vehicle}
         isOpen={updateCarModalIsOpen}
         closeModal={closeUpdateCarModal}
+        refetchVehicles={refetchVehicles}
       />
 
       <VehicleContainer>
         <ContentContainer>
           <VehicleTitle>{vehicle.name}</VehicleTitle>
-          <VehiclePlate>{vehicle.plate}</VehiclePlate>
+          <VehiclePlate>{vehicle.license_plate}</VehiclePlate>
         </ContentContainer>
 
         <ButtonsContainer>

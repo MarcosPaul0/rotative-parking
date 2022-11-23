@@ -11,6 +11,7 @@ import { RegisterCreditCardModal } from '../RegisterCreditCardModal';
 
 export interface CreditCardData {
   created_at: string;
+  cardName: string;
   cvc: number;
   deleted_at: string | null;
   expirationMonth: number;
@@ -90,7 +91,7 @@ export function SelectCreditCardModal({
             return (
               <CreditCard
                 key={creditCard.id}
-                owner={user!.name}
+                cardName={creditCard.cardName}
                 number={creditCard.number}
                 cvc={String(creditCard.cvc)}
                 dueDate={formattedDate}
