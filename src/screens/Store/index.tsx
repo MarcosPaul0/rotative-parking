@@ -60,7 +60,7 @@ export function StoreScreen() {
       expirationYear: 0,
       cardBrand: '',
       description: '',
-      region: undefined,
+      region: 0,
     },
   });
 
@@ -103,18 +103,21 @@ export function StoreScreen() {
     setValue('credits', currentCredit - 1);
   }
 
-  async function registerPayment({
-    credits,
-    vehiclePlate,
-    type,
-    cardNumber,
-    securityCode,
-    expirationMonth,
-    expirationYear,
-    cardBrand,
-    description,
-    cardHolderName,
-  }: PaymentFormData) {
+  async function registerPayment() {
+    const {
+      credits,
+      vehiclePlate,
+      type,
+      cardNumber,
+      securityCode,
+      expirationMonth,
+      expirationYear,
+      cardBrand,
+      description,
+      cardHolderName,
+      region,
+    }: PaymentFormData = getValues();
+
     try {
       const pixPaymentData = {
         method: type,
@@ -124,6 +127,7 @@ export function StoreScreen() {
         license_plate: vehiclePlate,
         credits,
         description,
+        region,
       };
 
       const creditCardPaymentData = {
@@ -140,20 +144,20 @@ export function StoreScreen() {
         installments: 1,
       };
 
-      await apiClient.post(
+      const response = await apiClient.post(
         ApiRoutes.PAYMENTS,
         type === 'creditCard' ? creditCardPaymentData : pixPaymentData
       );
 
+      console.log(response.data);
       reset();
-
       successNotify({
         title: 'Compra registrada',
         message: 'A compra foi registrada como pendente',
       });
-    } catch {
+    } catch (error) {
+      console.log(error.response.data);
       reset();
-
       errorNotify({
         title: 'Error na compra de créditos',
         message: 'Error ao registrar compra, tente novamente',
@@ -167,6 +171,10 @@ export function StoreScreen() {
     setVehicleModalIsOpen(true);
   }
 
+  function handleCloseVehicleModal() {
+    setVehicleModalIsOpen(false);
+  }
+
   function selectVehiclePlate({ license_plate }: VehicleData) {
     setValue('vehiclePlate', license_plate);
     setVehicleModalIsOpen(false);
@@ -177,6 +185,10 @@ export function StoreScreen() {
 
   function handleOpenRegionModal() {
     setSelectRegionModalIsOpen(true);
+  }
+
+  function handleCloseRegionModal() {
+    setSelectRegionModalIsOpen(false);
   }
 
   function selectRegion(region: RegionData) {
@@ -221,13 +233,14 @@ export function StoreScreen() {
           <SelectRegionModal
             isOpen={selectRegionModalIsOpen}
             selectRegion={selectRegion}
+            handleClose={handleCloseRegionModal}
           />
 
           <SelectContainer onPress={handleOpenRegionModal}>
             {regionWatched ? (
-              <SelectText>{activeRegion!.name}</SelectText>
+              <SelectText>{activeRegion!.region}</SelectText>
             ) : (
-              <SelectText>Selecionar região</SelectText>
+              <SelectText>Selecionar uma Região</SelectText>
             )}
           </SelectContainer>
 
@@ -236,13 +249,14 @@ export function StoreScreen() {
           <SelectVehicleModal
             isOpen={vehicleModalIsOpen}
             selectVehiclePlate={selectVehiclePlate}
+            handleClose={handleCloseVehicleModal}
           />
 
           <SelectContainer onPress={handleOpenVehicleModal}>
             {vehiclePlateWatched ? (
               <SelectText>{vehiclePlateWatched}</SelectText>
             ) : (
-              <SelectText>Selecionar Veículo</SelectText>
+              <SelectText>Selecionar um Veículo</SelectText>
             )}
           </SelectContainer>
 
@@ -265,7 +279,7 @@ export function StoreScreen() {
 
           <Button
             text="Confirmar Compra"
-            onPress={() => handleSubmit(registerPayment)}
+            onPress={registerPayment}
             mt={10}
             isLoading={isSubmitting}
           />

@@ -11,7 +11,7 @@ import {
 import { ViewContainer } from '@styles/defaults';
 import { useForm, FormProvider } from 'react-hook-form';
 import { Map } from '@enums/map.enum';
-import { Location } from '@screens/Admin/components/Location';
+import { Location } from '@components/Location';
 import { Button } from '@components/Button';
 import { initialLocation } from '@utils/initialLocation';
 import { useQuery } from 'react-query';

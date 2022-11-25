@@ -1,5 +1,5 @@
+import { Button } from '@components/Button';
 import { Modal } from '@components/Modal';
-import { useAuthContext } from '@contexts/AuthContext';
 import { ApiRoutes } from '@enums/apiRoutes.enum';
 import { apiClient } from '@services/apiClient';
 import { ScrollView } from 'react-native';
@@ -15,24 +15,24 @@ export interface VehicleData {
 interface SelectVehicleModalProps {
   isOpen: boolean;
   selectVehiclePlate: (vehicleData: VehicleData) => void;
+  handleClose: () => void;
 }
 
 export function SelectVehicleModal({
   isOpen,
   selectVehiclePlate,
+  handleClose,
 }: SelectVehicleModalProps) {
-  const { user } = useAuthContext();
-
   const { data: vehicles } = useQuery<VehicleData[]>(
     ['vehicles'],
     async () => {
       try {
         const response = await apiClient.get<VehicleData[]>(
-          `${ApiRoutes.VEHICLE}/${user!.id}`
+          ApiRoutes.MY_VEHICLES
         );
 
         return response.data;
-      } catch {
+      } catch (error) {
         return [];
       }
     },
@@ -56,6 +56,14 @@ export function SelectVehicleModal({
           />
         ))}
       </ScrollView>
+
+      <Button
+        text="Fechar"
+        bgColor="red"
+        variant="outlined"
+        onPress={handleClose}
+        mt={10}
+      />
     </Modal>
   );
 }

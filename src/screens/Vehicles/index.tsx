@@ -61,6 +61,7 @@ export function VehiclesScreen() {
       <CarsList>
         {vehicles!.map((vehicle) => (
           <Vehicle
+            key={vehicle.id}
             vehicle={{
               id: vehicle.id,
               name: vehicle.name,

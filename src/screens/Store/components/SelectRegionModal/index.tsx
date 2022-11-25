@@ -1,3 +1,4 @@
+import { Button } from '@components/Button';
 import { Modal } from '@components/Modal';
 import { ApiRoutes } from '@enums/apiRoutes.enum';
 import { apiClient } from '@services/apiClient';
@@ -7,20 +8,23 @@ import { Region } from '../Region';
 
 export interface RegionData {
   id: number;
-  name: string;
+  region: string;
   latitude: number;
   longitude: number;
   price: number;
+  parking_lots: number;
 }
 
 interface SelectCreditCardModalProps {
   isOpen: boolean;
   selectRegion: (region: RegionData) => void;
+  handleClose: () => void;
 }
 
 export function SelectRegionModal({
   isOpen,
   selectRegion,
+  handleClose,
 }: SelectCreditCardModalProps) {
   const { data: regions } = useQuery<RegionData[]>(
     ['regions'],
@@ -48,11 +52,19 @@ export function SelectRegionModal({
         {regions!.map((region) => (
           <Region
             key={region.id}
-            region={region.name}
+            region={region.region}
             onPress={() => selectRegion(region)}
           />
         ))}
       </ScrollView>
+
+      <Button
+        text="Fechar"
+        bgColor="red"
+        variant="outlined"
+        onPress={handleClose}
+        mt={10}
+      />
     </Modal>
   );
 }

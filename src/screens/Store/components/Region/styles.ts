@@ -11,7 +11,9 @@ export const RegionOption = styled.TouchableOpacity`
 
 export const RegionText = styled.Text`
   ${({ theme }) => css`
-    font-family: ${theme.FONTS.REGULAR};
+    text-align: center;
+    font-family: ${theme.FONTS.BOLD};
     font-size: ${theme.FONT_SIZE.LG};
+    color: ${theme.COLORS.GRAY_200};
   `}
 `;

@@ -20,6 +20,10 @@ export function BuyByCreditCard() {
     setCreditCardModalIsOpen(true);
   }
 
+  function handleCloseCreditCardModal() {
+    setCreditCardModalIsOpen(false);
+  }
+
   function selectCreditCard({
     number,
     cvc,
@@ -42,6 +46,7 @@ export function BuyByCreditCard() {
       <SelectCreditCardModal
         isOpen={creditCardModalIsOpen}
         selectCreditCard={selectCreditCard}
+        handleClose={handleCloseCreditCardModal}
       />
 
       <SelectContainer onPress={handleOpenCreditCardModal}>
@@ -50,7 +55,7 @@ export function BuyByCreditCard() {
             {formatCreditCardNumber(creditCardNumberWatched)}
           </SelectText>
         ) : (
-          <SelectText>Selecionar Cartão</SelectText>
+          <SelectText>Selecionar um Cartão</SelectText>
         )}
       </SelectContainer>
     </>

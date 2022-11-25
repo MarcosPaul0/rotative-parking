@@ -8,15 +8,10 @@ export const ModalContainer = styled.View`
   background: rgba(0, 0, 0, 0.3);
 `;
 
-export const ContentContainer = styled.View`
-  ${({ theme }) => css`
-    width: 100%;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    border-radius: 10px;
-    background: ${theme.COLORS.GRAY_800};
-  `}
+export const ContentContainer = styled.ScrollView`
+  width: 100%;
+  max-height: 100%;
+  border-radius: 10px;
 `;
 
 interface ModalTextStyle {

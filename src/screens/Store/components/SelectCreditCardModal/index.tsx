@@ -26,11 +26,13 @@ export interface CreditCardData {
 interface SelectCreditCardModalProps {
   isOpen: boolean;
   selectCreditCard: (creditCardData: CreditCardData) => void;
+  handleClose: () => void;
 }
 
 export function SelectCreditCardModal({
   isOpen,
   selectCreditCard,
+  handleClose,
 }: SelectCreditCardModalProps) {
   const { user } = useAuthContext();
 
@@ -100,6 +102,14 @@ export function SelectCreditCardModal({
             );
           })}
         </ScrollView>
+
+        <Button
+          text="Fechar"
+          bgColor="red"
+          variant="outlined"
+          onPress={handleClose}
+          mt={10}
+        />
       </Modal>
     </>
   );

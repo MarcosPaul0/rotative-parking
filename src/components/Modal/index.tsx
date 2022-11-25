@@ -3,7 +3,7 @@ import { ReactNode, useContext } from 'react';
 import { Modal as RNModal, ModalProps as RNModalProps } from 'react-native';
 import { ThemeContext } from 'styled-components/native';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
-import { ModalContainer, ModalText } from './styles';
+import { ContentContainer, ModalContainer, ModalText } from './styles';
 
 interface ModalProps extends RNModalProps {
   text?: string;
@@ -31,9 +31,11 @@ export function Modal({
           }}
           colors={[COLORS.GRAY_700, COLORS.GRAY_800]}
         >
-          <ModalText type={textType}>{text}</ModalText>
+          <ContentContainer>
+            <ModalText type={textType}>{text}</ModalText>
 
-          {children}
+            {children}
+          </ContentContainer>
         </LinearGradient>
       </ModalContainer>
 
