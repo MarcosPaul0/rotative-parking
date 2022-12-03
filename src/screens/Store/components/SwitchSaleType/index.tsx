@@ -1,9 +1,8 @@
-import { PaymentFormData } from '@screens/Store';
 import { CreditCard } from 'phosphor-react-native';
 import { useContext } from 'react';
 import { UseFormSetValue } from 'react-hook-form';
 import { ThemeContext } from 'styled-components/native';
-import { Pix } from '../../../../icons/Pix';
+import { Pix } from '@icons/Pix';
 import {
   SwitchSalesTypeContainer,
   TextContainer,
@@ -12,7 +11,7 @@ import {
 } from './styles';
 
 interface SwitchSaleTypeProps {
-  setValue: UseFormSetValue<PaymentFormData>;
+  setValue: UseFormSetValue<any>;
   type: 'creditCard' | 'pix';
 }
 

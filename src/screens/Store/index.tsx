@@ -13,6 +13,8 @@ import { apiClient } from '@services/apiClient';
 import { ApiRoutes } from '@enums/apiRoutes.enum';
 import { useAuthContext } from '@contexts/AuthContext';
 import { Validations } from '@enums/validations.enum';
+import { useNavigation } from '@react-navigation/native';
+import { AppRoutes } from '@enums/appRoutes.enum';
 import { BuyByCreditCard } from './components/BuyByCreditCard';
 import {
   SelectVehicleModal,
@@ -43,8 +45,17 @@ export interface PaymentFormData {
   region: number;
 }
 
+export interface PaymentResponse {
+  aditional_data: {
+    mp_ticket_url: string;
+    pix_qr_code: string;
+  };
+}
+
 export function StoreScreen() {
   const { errorNotify, successNotify } = useNotify();
+
+  const { navigate } = useNavigation();
 
   const { user } = useAuthContext();
 
@@ -144,19 +155,29 @@ export function StoreScreen() {
         installments: 1,
       };
 
-      const response = await apiClient.post(
+      const response = await apiClient.post<PaymentResponse>(
         ApiRoutes.PAYMENTS,
         type === 'creditCard' ? creditCardPaymentData : pixPaymentData
       );
 
-      console.log(response.data);
       reset();
       successNotify({
         title: 'Compra registrada',
         message: 'A compra foi registrada como pendente',
       });
+
+      if (type === 'creditCard') {
+        navigate(AppRoutes.SUCCESS_CARD_SALE, {
+          validate: finalDate,
+        });
+      } else {
+        navigate(AppRoutes.SUCCESS_PIX_SALE, {
+          ticketUrl: response.data.aditional_data.mp_ticket_url,
+          tokenQrCode: response.data.aditional_data.pix_qr_code,
+          validate: finalDate,
+        });
+      }
     } catch (error) {
-      console.log(error.response.data);
       reset();
       errorNotify({
         title: 'Error na compra de créditos',
@@ -279,7 +300,7 @@ export function StoreScreen() {
 
           <Button
             text="Confirmar Compra"
-            onPress={registerPayment}
+            onPress={handleSubmit(registerPayment)}
             mt={10}
             isLoading={isSubmitting}
           />

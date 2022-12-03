@@ -14,6 +14,9 @@ import { AppRoutes } from '@enums/appRoutes.enum';
 import { useNotify } from '@hooks/useNotify';
 import { Roles } from '@enums/roles.enum';
 import { AxiosError } from 'axios';
+import * as Notifications from 'expo-notifications';
+
+let socket: WebSocket;
 
 export interface User {
   id: number;
@@ -41,13 +44,65 @@ interface AuthContextProviderProps {
   children: ReactNode;
 }
 
+const notifyUrl = 'http://192.168.0.109:3334';
+
 export function AuthContextProvider({ children }: AuthContextProviderProps) {
   const [user, setUser] = useState<User | null>(null);
   const isAuthenticated = !!user;
 
-  const { errorNotify } = useNotify();
+  const { errorNotify, notify } = useNotify();
 
   const { navigate } = useNavigation();
+
+  // eslint-disable-next-line consistent-return
+  useEffect(() => {
+    if (!isAuthenticated) {
+      return;
+    }
+
+    if (socket?.OPEN) {
+      return;
+    }
+
+    if (isAuthenticated && user.role === Roles.FISCAL) {
+      socket = new WebSocket(`${notifyUrl}/fiscal/ws`);
+
+      socket.addEventListener('message', async (event) => {
+        if (event.data) {
+          const data = JSON.parse(event.data);
+
+          if (data?.message) {
+            const message = JSON.parse(data.message);
+
+            notify({
+              title: 'Créditos Vencidos',
+              message: `Os créditos do veículo com a placa ${message.license_plate} venceram!`,
+            });
+          }
+        }
+      });
+    } else if (isAuthenticated && user.role === Roles.USER) {
+      socket = new WebSocket(`${notifyUrl}/users/ws`);
+
+      socket.addEventListener('message', async () => {
+        notify({
+          title: 'Créditos Vencidos',
+          message: `Caso queira continuar usando a vaga realize uma nova compra de créditos`,
+        });
+      });
+    }
+  }, [isAuthenticated]);
+
+  useEffect(() => {
+    (async () => {
+      const { status: existingStatus } =
+        await Notifications.getPermissionsAsync();
+
+      if (existingStatus !== 'granted') {
+        await Notifications.requestPermissionsAsync();
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -121,6 +176,8 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     setUser(null);
 
     await AsyncStorage.removeItem(StorageItems.TOKEN);
+
+    socket.close();
 
     navigate(AppRoutes.LOGIN);
   }

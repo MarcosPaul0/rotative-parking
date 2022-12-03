@@ -44,7 +44,7 @@ export function UpdateVehicleModal({
         message: 'O veículo foi atualizado com sucesso',
       });
       closeModal();
-    } catch {
+    } catch (error) {
       errorNotify({
         title: 'Erro ao atualizar o veículo',
         message: 'Ocorreu um erro ao atualizar o veículo, tente novamente',

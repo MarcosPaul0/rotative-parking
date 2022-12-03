@@ -2,7 +2,6 @@ import styled, { css } from 'styled-components/native';
 
 export const SearchInputContainer = styled.View`
   ${({ theme }) => css`
-    flex: 1;
     flex-direction: row;
     margin-top: 20px;
     margin-bottom: 10px;

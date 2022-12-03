@@ -58,3 +58,7 @@ export const StatusText = styled.Text<StatusTextStyle>`
     color: ${theme.COLORS[STATUS_COLOR[color]]};
   `}
 `;
+
+export const PaymentsContainer = styled.ScrollView`
+  flex: 1;
+`;

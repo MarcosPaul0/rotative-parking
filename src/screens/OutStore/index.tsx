@@ -4,34 +4,54 @@ import { Input } from '@components/Input';
 import { MaskedInput } from '@components/MaskedInput';
 import { NumberInput } from '@components/NumberInput';
 import { Validations } from '@enums/validations.enum';
-import { PaymentFormData } from '@screens/Store';
+import { useNotify } from '@hooks/useNotify';
 import {
-    RegionData,
-    SelectRegionModal
+  RegionData,
+  SelectRegionModal,
 } from '@screens/Store/components/SelectRegionModal';
 import { SwitchSaleType } from '@screens/Store/components/SwitchSaleType';
 import {
-    LeftText,
-    LineContainer,
-    RightText,
-    SelectContainer,
-    SelectText
+  LeftText,
+  LineContainer,
+  RightText,
+  SelectText,
 } from '@screens/Store/styles';
-import { ScrollScreenContainer, Text } from '@styles/defaults';
+import { ScrollScreenContainer } from '@styles/defaults';
 import { formatPrice } from '@utils/formatPrice';
 import { addHours, format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { useNavigation } from '@react-navigation/native';
+import { Toast } from 'react-native-toast-message/lib/src/Toast';
+import { AppRoutes } from '@enums/appRoutes.enum';
+import { ApiRoutes } from '@enums/apiRoutes.enum';
+import { apiClient } from '@services/apiClient';
+import { SelectContainer } from './styles';
 
-interface PaymentFormWithCardAndCpfData extends PaymentFormData {
-  cardName: string;
+export interface PaymentFormWithCardAndCpfData {
+  credits: number;
+  vehiclePlate: string;
+  type: 'creditCard' | 'pix';
+  cardNumber?: string;
+  expirationMonth?: number;
+  expirationYear?: number;
+  cardBrand?: string;
+  description: string;
+  cardHolderName?: string;
+  region: number;
+  name: string;
   cardValidity: string;
-  cardCvc: string;
+  cvc: string;
   cpf: string;
+  email: string;
 }
 
 export function OutStoreScreen() {
+  const { successNotify, errorNotify } = useNotify();
+
+  const { navigate } = useNavigation();
+
   const [selectRegionModalIsOpen, setSelectRegionModalIsOpen] = useState(false);
   const [activeRegion, setActiveRegion] = useState<RegionData | null>(null);
 
@@ -40,18 +60,16 @@ export function OutStoreScreen() {
       credits: 1,
       vehiclePlate: '',
       type: 'creditCard',
+      name: '',
       cpf: '',
+      email: '',
       cardNumber: '',
       cardHolderName: '',
-      securityCode: 0,
-      expirationMonth: 0,
-      expirationYear: 0,
       cardBrand: '',
       description: '',
       region: 0,
-      cardName: '',
       cardValidity: '',
-      cardCvc: '',
+      cvc: '',
     },
   });
 
@@ -113,64 +131,75 @@ export function OutStoreScreen() {
   };
 
   async function registerPayment() {
-    // const {
-    //   credits,
-    //   vehiclePlate,
-    //   type,
-    //   cardNumber,
-    //   cardHolderName,
-    //   securityCode,
-    //   expirationMonth,
-    //   expirationYear,
-    //   cardBrand,
-    //   description,
-    //   region,
-    //   cardName,
-    //   cardValidity,
-    //   cardCvc,
-    // }: PaymentFormWithCardData = getValues();
-    // try {
-    //   const pixPaymentData = {
-    //     method: type,
-    //     name: user?.name,
-    //     cpf: user?.cpf,
-    //     email: user?.email,
-    //     license_plate: vehiclePlate,
-    //     credits,
-    //     description,
-    //     region,
-    //   };
-    //   const creditCardPaymentData = {
-    //     // ...pixPaymentData,
-    //     card_info: {
-    //       card_number: cardNumber?.replace(/\s/g, ''),
-    //       card_holder_cpf: user?.cpf,
-    //       securityCode,
-    //       expiration_month: expirationMonth,
-    //       expiration_year: expirationYear,
-    //       card_brand: cardBrand,
-    //       card_holder_name: cardHolderName,
-    //     },
-    //     installments: 1,
-    //   };
-    //   const response = await apiClient.post(
-    //     ApiRoutes.PAYMENTS,
-    //     type === 'creditCard' ? creditCardPaymentData : pixPaymentData
-    //   );
-    //   console.log(response.data);
-    //   reset();
-    //   successNotify({
-    //     title: 'Compra registrada',
-    //     message: 'A compra foi registrada como pendente',
-    //   });
-    // } catch (error) {
-    //   console.log(error.response.data);
-    //   reset();
-    //   errorNotify({
-    //     title: 'Error na compra de créditos',
-    //     message: 'Error ao registrar compra, tente novamente',
-    //   });
-    // }
+    const {
+      credits,
+      vehiclePlate,
+      type,
+      cardNumber,
+      cardHolderName,
+      cardBrand,
+      description,
+      region,
+      name,
+      cardValidity,
+      cvc,
+      email,
+      cpf,
+    }: PaymentFormWithCardAndCpfData = getValues();
+    try {
+      const pixPaymentData = {
+        method: type,
+        name,
+        cpf,
+        email,
+        license_plate: vehiclePlate,
+        credits,
+        description,
+        region,
+      };
+
+      const creditCardPaymentData = {
+        ...pixPaymentData,
+        card_info: {
+          card_number: cardNumber?.replace(/\s/g, ''),
+          card_holder_cpf: cpf,
+          securityCode: cvc,
+          expiration_month: +cardValidity.split('/')[0],
+          expiration_year: +cardValidity.split('/')[1],
+          card_brand: cardBrand,
+          card_holder_name: cardHolderName,
+        },
+        installments: 1,
+      };
+
+      const response = await apiClient.post(
+        ApiRoutes.PAYMENTS,
+        type === 'creditCard' ? creditCardPaymentData : pixPaymentData
+      );
+      reset();
+      successNotify({
+        title: 'Compra registrada',
+        message: 'A compra foi registrada como pendente',
+      });
+
+      if (type === 'creditCard') {
+        navigate(AppRoutes.SUCCESS_CARD_SALE, {
+          validate: finalDate,
+        });
+      } else {
+        navigate(AppRoutes.SUCCESS_PIX_SALE, {
+          ticketUrl: response.data.aditional_data.mp_ticket_url,
+          tokenQrCode: response.data.aditional_data.pix_qr_code,
+          validate: finalDate,
+        });
+      }
+    } catch {
+      reset();
+      errorNotify({
+        title: 'Error na compra de créditos',
+        message: 'Error ao registrar compra, tente novamente',
+      });
+    }
   }
 
   return (
@@ -221,13 +250,38 @@ export function OutStoreScreen() {
           </SelectContainer>
 
           <Input
-            label="Email ou CPF"
+            label="Nome no cartão"
+            controllerProps={{
+              control,
+              name: 'name',
+              rules: {
+                required: requiredRule,
+              },
+            }}
+            errorMessage={errors.name?.message}
+          />
+
+          <Input
+            label="Email"
+            controllerProps={{
+              control,
+              name: 'email',
+              rules: {
+                required: requiredRule,
+              },
+            }}
+            errorMessage={errors.email?.message}
+          />
+
+          <MaskedInput
+            label="CPF"
+            mask="999.999.999-99"
             errorMessage={errors.cpf?.message}
             controllerProps={{
               control,
               name: 'cpf',
               rules: {
-                required: { message: Validations.REQUIRED, value: true },
+                required: requiredRule,
               },
             }}
           />
@@ -247,19 +301,6 @@ export function OutStoreScreen() {
 
           {typeWatched === 'creditCard' ? (
             <>
-              <MaskedInput
-                label="Nome no cartão"
-                mask="9999 9999 9999 9999"
-                controllerProps={{
-                  control,
-                  name: 'cardName',
-                  rules: {
-                    required: requiredRule,
-                  },
-                }}
-                errorMessage={errors.cardName?.message}
-              />
-
               <MaskedInput
                 mask="9999 9999 9999 9999"
                 label="Número do cartão"
@@ -291,7 +332,7 @@ export function OutStoreScreen() {
                     },
                   },
                 }}
-                errorMessage={errors.cardCvc?.message}
+                errorMessage={errors.cvc?.message}
               />
 
               <MaskedInput
@@ -299,7 +340,7 @@ export function OutStoreScreen() {
                 label="Validade"
                 controllerProps={{
                   control,
-                  name: 'validity',
+                  name: 'cardValidity',
                   rules: {
                     required: requiredRule,
                     minLength: {
@@ -313,48 +354,16 @@ export function OutStoreScreen() {
             </>
           ) : null}
 
-          {typeWatched === 'pix' && <Text>QR Code Gerado</Text>}
-          {/* 
-          <SelectVehicleModal
-            isOpen={vehicleModalIsOpen}
-            selectVehiclePlate={selectVehiclePlate}
-            handleClose={handleCloseVehicleModal}
-          />
-
-          <SelectContainer onPress={handleOpenVehicleModal}>
-            {vehiclePlateWatched ? (
-              <SelectText>{vehiclePlateWatched}</SelectText>
-            ) : (
-              <SelectText>Selecionar um Veículo</SelectText>
-            )}
-          </SelectContainer>
-
-          <Input
-            inputProps={{
-              placeholder: 'Descrição...',
-            }}
-            controllerProps={{
-              control,
-              name: 'description',
-              rules: {
-                required: {
-                  value: true,
-                  message: Validations.REQUIRED,
-                },
-              },
-            }}
-            errorMessage={errors.description?.message}
-          />
-        */}
-
           <Button
             text="Finalizar Compra"
-            onPress={registerPayment}
+            onPress={handleSubmit(registerPayment)}
             mt={10}
             isLoading={isSubmitting}
           />
         </Card>
       </ScrollScreenContainer>
+
+      <Toast />
     </FormProvider>
   );
 }

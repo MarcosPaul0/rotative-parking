@@ -6,6 +6,7 @@ import { AppRoutes } from '@enums/appRoutes.enum';
 import { Validations } from '@enums/validations.enum';
 import { useNavigation } from '@react-navigation/native';
 import { useForm } from 'react-hook-form';
+import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import { ScreenContainer, Text } from '../../styles/defaults';
 import { RegisterContainer } from './styles';
 
@@ -39,58 +40,62 @@ export function LoginScreen() {
   }
 
   return (
-    <ScreenContainer>
-      <Card title="Bem Vindo" subtitle="Preencha seus dados para entrar">
-        <Input
-          label="Email ou CPF"
-          errorMessage={errors.login?.message}
-          controllerProps={{
-            control,
-            name: 'login',
-            rules: {
-              required: { message: Validations.REQUIRED, value: true },
-            },
-          }}
-        />
-        <Input
-          label="Senha"
-          errorMessage={errors.password?.message}
-          controllerProps={{
-            control,
-            name: 'password',
-            rules: {
-              required: { message: Validations.REQUIRED, value: true },
-            },
-          }}
-          inputProps={{
-            textContentType: 'password',
-            secureTextEntry: true,
-          }}
-        />
-
-        <Button
-          text="Entrar"
-          mb={20}
-          onPress={handleSubmit(login)}
-          isLoading={isSubmitting}
-        />
-        <Button
-          text="Comprar créditos"
-          variant="outlined"
-          onPress={navigateToStoreScreen}
-        />
-
-        <RegisterContainer>
-          <Text>Não possui uma conta?</Text>
+    <>
+      <ScreenContainer>
+        <Card title="Bem Vindo" subtitle="Preencha seus dados para entrar">
+          <Input
+            label="Email ou CPF"
+            errorMessage={errors.login?.message}
+            controllerProps={{
+              control,
+              name: 'login',
+              rules: {
+                required: { message: Validations.REQUIRED, value: true },
+              },
+            }}
+          />
+          <Input
+            label="Senha"
+            errorMessage={errors.password?.message}
+            controllerProps={{
+              control,
+              name: 'password',
+              rules: {
+                required: { message: Validations.REQUIRED, value: true },
+              },
+            }}
+            inputProps={{
+              textContentType: 'password',
+              secureTextEntry: true,
+            }}
+          />
 
           <Button
-            text="Registre-se"
-            variant="text"
-            onPress={navigateToRegisterScreen}
-            ml={5}
+            text="Entrar"
+            mb={20}
+            onPress={handleSubmit(login)}
+            isLoading={isSubmitting}
           />
-        </RegisterContainer>
-      </Card>
-    </ScreenContainer>
+          <Button
+            text="Comprar créditos"
+            variant="outlined"
+            onPress={navigateToStoreScreen}
+          />
+
+          <RegisterContainer>
+            <Text>Não possui uma conta?</Text>
+
+            <Button
+              text="Registre-se"
+              variant="text"
+              onPress={navigateToRegisterScreen}
+              ml={5}
+            />
+          </RegisterContainer>
+        </Card>
+      </ScreenContainer>
+
+      <Toast />
+    </>
   );
 }

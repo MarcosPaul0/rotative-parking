@@ -9,6 +9,7 @@ import { Validations } from '@enums/validations.enum';
 import { useNotify } from '@hooks/useNotify';
 import { apiClient } from '@services/apiClient';
 import { useForm } from 'react-hook-form';
+import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import { ScreenContainer } from '../../styles/defaults';
 
 interface RegisterUserData {
@@ -62,92 +63,96 @@ export function RegisterScreen() {
   }
 
   return (
-    <ScreenContainer>
-      <Card title="Bem Vindo" subtitle="Preencha seus dados para entrar">
-        <Input
-          label="Nome"
-          errorMessage={errors.name?.message}
-          controllerProps={{
-            control,
-            name: 'name',
-            rules: {
-              required: {
-                value: true,
-                message: Validations.REQUIRED,
+    <>
+      <ScreenContainer>
+        <Card title="Bem Vindo" subtitle="Preencha seus dados para entrar">
+          <Input
+            label="Nome"
+            errorMessage={errors.name?.message}
+            controllerProps={{
+              control,
+              name: 'name',
+              rules: {
+                required: {
+                  value: true,
+                  message: Validations.REQUIRED,
+                },
               },
-            },
-          }}
-        />
+            }}
+          />
 
-        <MaskedInput
-          label="CPF"
-          errorMessage={errors.cpf?.message}
-          controllerProps={{
-            control,
-            name: 'cpf',
-            rules: {
-              required: {
-                value: true,
-                message: Validations.REQUIRED,
+          <MaskedInput
+            label="CPF"
+            errorMessage={errors.cpf?.message}
+            controllerProps={{
+              control,
+              name: 'cpf',
+              rules: {
+                required: {
+                  value: true,
+                  message: Validations.REQUIRED,
+                },
+                pattern: {
+                  value: Patterns.CPF,
+                  message: Validations.CPF,
+                },
               },
-              pattern: {
-                value: Patterns.CPF,
-                message: Validations.CPF,
+            }}
+            mask="999.999.999-99"
+          />
+          <Input
+            label="Email"
+            errorMessage={errors.email?.message}
+            controllerProps={{
+              control,
+              name: 'email',
+              rules: {
+                required: {
+                  value: true,
+                  message: Validations.REQUIRED,
+                },
+                pattern: {
+                  value: Patterns.EMAIL,
+                  message: Validations.EMAIL,
+                },
               },
-            },
-          }}
-          mask="999.999.999-99"
-        />
-        <Input
-          label="Email"
-          errorMessage={errors.email?.message}
-          controllerProps={{
-            control,
-            name: 'email',
-            rules: {
-              required: {
-                value: true,
-                message: Validations.REQUIRED,
+            }}
+            inputProps={{
+              textContentType: 'emailAddress',
+            }}
+          />
+          <Input
+            label="Senha"
+            errorMessage={errors.password?.message}
+            controllerProps={{
+              control,
+              name: 'password',
+              rules: {
+                required: {
+                  value: true,
+                  message: Validations.REQUIRED,
+                },
+                pattern: {
+                  value: Patterns.PASSWORD,
+                  message: Validations.PASSWORD,
+                },
               },
-              pattern: {
-                value: Patterns.EMAIL,
-                message: Validations.EMAIL,
-              },
-            },
-          }}
-          inputProps={{
-            textContentType: 'emailAddress',
-          }}
-        />
-        <Input
-          label="Senha"
-          errorMessage={errors.password?.message}
-          controllerProps={{
-            control,
-            name: 'password',
-            rules: {
-              required: {
-                value: true,
-                message: Validations.REQUIRED,
-              },
-              pattern: {
-                value: Patterns.PASSWORD,
-                message: Validations.PASSWORD,
-              },
-            },
-          }}
-          inputProps={{
-            textContentType: 'password',
-            secureTextEntry: true,
-          }}
-        />
+            }}
+            inputProps={{
+              textContentType: 'password',
+              secureTextEntry: true,
+            }}
+          />
 
-        <Button
-          text="Cadastrar"
-          onPress={handleSubmit(registerUser)}
-          isLoading={isSubmitting}
-        />
-      </Card>
-    </ScreenContainer>
+          <Button
+            text="Cadastrar"
+            onPress={handleSubmit(registerUser)}
+            isLoading={isSubmitting}
+          />
+        </Card>
+      </ScreenContainer>
+
+      <Toast />
+    </>
   );
 }

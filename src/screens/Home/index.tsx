@@ -48,11 +48,11 @@ export function HomeScreen() {
   );
 
   useEffect(() => {
-    async () => {
+    (async () => {
       if (!status?.granted) {
         await requestPermission();
       }
-    };
+    })();
   }, []);
 
   async function getRegionData(locationId: number) {

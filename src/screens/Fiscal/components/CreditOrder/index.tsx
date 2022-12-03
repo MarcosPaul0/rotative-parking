@@ -11,16 +11,22 @@ import {
 } from './styles';
 
 interface PurchasedCreditProps {
-  status: 'paid' | 'pending' | 'canceled';
+  plate: string;
+  status: 'approved' | 'pending' | 'canceled';
+  createdAt: string;
 }
 
-export function CreditOrder({ status }: PurchasedCreditProps) {
-  const date = format(new Date(), 'dd/MM/yyyy hh:mm:ss');
+export function CreditOrder({
+  status,
+  plate,
+  createdAt,
+}: PurchasedCreditProps) {
+  const date = format(new Date(createdAt), 'dd/MM/yyyy hh:mm:ss');
 
   const { COLORS } = useContext(ThemeContext);
 
   const STATUS_DATA = {
-    paid: {
+    approved: {
       color: 'green',
       status: 'PAGO',
       icon: <Check size={32} color={COLORS.GREEN_500} />,
@@ -41,7 +47,7 @@ export function CreditOrder({ status }: PurchasedCreditProps) {
 
   return (
     <CreditsOrderContainer>
-      <PlateText>1234-SDF</PlateText>
+      <PlateText>{plate}</PlateText>
       <DateText>{date}</DateText>
 
       <StatusContainer>

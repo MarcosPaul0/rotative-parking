@@ -16,6 +16,7 @@
       "@hooks/*": ["./src/hooks/*"],
       "@contexts/*": ["./src/contexts/*"],
       "@styles/*": ["./src/styles/*"],
+      "@icons/*": ["./src/icons/*"],
     }
   },
 }

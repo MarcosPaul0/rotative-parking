@@ -9,4 +9,7 @@ export enum AppRoutes {
   TAB_ROUTER = 'TabRouter',
   STACK_ROUTER = 'StackRouter',
   FISCAL = 'Fiscal',
+  USERS_ADMINISTRATION = 'Usuários',
+  SUCCESS_PIX_SALE = 'PixSucesso',
+  SUCCESS_CARD_SALE = 'CreditoSucesso',
 }

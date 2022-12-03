@@ -10,4 +10,5 @@ export enum ApiRoutes {
   PAYMENTS = '/payments',
   REGIONS = '/regions',
   PARKING_LOTS = '/perking-lots',
+  USE_CREDITS = '/use-credits',
 }

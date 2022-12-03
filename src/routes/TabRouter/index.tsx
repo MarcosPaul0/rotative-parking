@@ -2,12 +2,19 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { UserScreen } from '@screens/User';
 import { StoreScreen } from '@screens/Store';
 import { VehiclesScreen } from '@screens/Vehicles';
-import { Car, House, Storefront, User } from 'phosphor-react-native';
+import {
+  Car,
+  House,
+  Storefront,
+  User,
+  UsersThree,
+} from 'phosphor-react-native';
 import { HomeScreen } from '@screens/Home';
 import { useAuthContext } from '@contexts/AuthContext';
 import { Roles } from '@enums/roles.enum';
 import { AdminScreen } from '@screens/Admin';
 import { FiscalScreen } from '@screens/Fiscal';
+import { UserAdministration } from '@screens/UsersAdministration';
 import { AppRoutes } from '../../enums/appRoutes.enum';
 
 const Tab = createBottomTabNavigator();
@@ -47,13 +54,22 @@ export function TabRouter() {
         </>
       )}
       {user?.role === Roles.ADMIN && (
-        <Tab.Screen
-          name={AppRoutes.HOME}
-          component={AdminScreen}
-          options={{
-            tabBarIcon: ({ color }) => <House color={color} size={30} />,
-          }}
-        />
+        <>
+          <Tab.Screen
+            name={AppRoutes.HOME}
+            component={AdminScreen}
+            options={{
+              tabBarIcon: ({ color }) => <House color={color} size={30} />,
+            }}
+          />
+          <Tab.Screen
+            name={AppRoutes.USERS_ADMINISTRATION}
+            component={UserAdministration}
+            options={{
+              tabBarIcon: ({ color }) => <UsersThree color={color} size={30} />,
+            }}
+          />
+        </>
       )}
       {user?.role === Roles.FISCAL && (
         <Tab.Screen
