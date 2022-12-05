@@ -15,6 +15,7 @@ import { Roles } from '@enums/roles.enum';
 import { AdminScreen } from '@screens/Admin';
 import { FiscalScreen } from '@screens/Fiscal';
 import { UserAdministration } from '@screens/UsersAdministration';
+import { FiscalStoreScreen } from '@screens/FiscalStore';
 import { AppRoutes } from '../../enums/appRoutes.enum';
 
 const Tab = createBottomTabNavigator();
@@ -72,13 +73,22 @@ export function TabRouter() {
         </>
       )}
       {user?.role === Roles.FISCAL && (
-        <Tab.Screen
-          name={AppRoutes.FISCAL}
-          component={FiscalScreen}
-          options={{
-            tabBarIcon: ({ color }) => <House color={color} size={30} />,
-          }}
-        />
+        <>
+          <Tab.Screen
+            name={AppRoutes.FISCAL}
+            component={FiscalScreen}
+            options={{
+              tabBarIcon: ({ color }) => <House color={color} size={30} />,
+            }}
+          />
+          <Tab.Screen
+            name={AppRoutes.STORE}
+            component={FiscalStoreScreen}
+            options={{
+              tabBarIcon: ({ color }) => <Storefront color={color} size={30} />,
+            }}
+          />
+        </>
       )}
       <Tab.Screen
         name={AppRoutes.USER}

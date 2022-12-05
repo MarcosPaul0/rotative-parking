@@ -9,6 +9,6 @@ export enum ApiRoutes {
   LOCATION = '/location',
   PAYMENTS = '/payments',
   REGIONS = '/regions',
-  PARKING_LOTS = '/perking-lots',
+  PARKING_LOTS = '/regions/vacancies/',
   USE_CREDITS = '/use-credits',
 }

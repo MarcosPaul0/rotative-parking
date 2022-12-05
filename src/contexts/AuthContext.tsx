@@ -15,6 +15,7 @@ import { useNotify } from '@hooks/useNotify';
 import { Roles } from '@enums/roles.enum';
 import { AxiosError } from 'axios';
 import * as Notifications from 'expo-notifications';
+import { CONFIGS } from '@configs/configs';
 
 let socket: WebSocket;
 
@@ -44,8 +45,6 @@ interface AuthContextProviderProps {
   children: ReactNode;
 }
 
-const notifyUrl = 'http://192.168.0.109:3334';
-
 export function AuthContextProvider({ children }: AuthContextProviderProps) {
   const [user, setUser] = useState<User | null>(null);
   const isAuthenticated = !!user;
@@ -54,7 +53,6 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
   const { navigate } = useNavigation();
 
-  // eslint-disable-next-line consistent-return
   useEffect(() => {
     if (!isAuthenticated) {
       return;
@@ -65,7 +63,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     }
 
     if (isAuthenticated && user.role === Roles.FISCAL) {
-      socket = new WebSocket(`${notifyUrl}/fiscal/ws`);
+      socket = new WebSocket(`${CONFIGS.notifyURL}/fiscal/ws`);
 
       socket.addEventListener('message', async (event) => {
         if (event.data) {
@@ -82,7 +80,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
         }
       });
     } else if (isAuthenticated && user.role === Roles.USER) {
-      socket = new WebSocket(`${notifyUrl}/users/ws`);
+      socket = new WebSocket(`${CONFIGS.notifyURL}/users/ws`);
 
       socket.addEventListener('message', async () => {
         notify({

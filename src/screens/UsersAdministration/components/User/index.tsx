@@ -1,5 +1,6 @@
 import { IconButton } from '@components/IconButton';
 import { Roles } from '@enums/roles.enum';
+import { formatCpf } from '@utils/formatCpf';
 import { Pen, Trash } from 'phosphor-react-native';
 import { useContext, useState } from 'react';
 import { ThemeContext } from 'styled-components/native';
@@ -75,7 +76,7 @@ export function User({ user, refetchUsers }: UserProps) {
 
           <LineContainer>
             <LeftText>CPF</LeftText>
-            <RightText>{user.cpf}</RightText>
+            <RightText>{formatCpf(user.cpf)}</RightText>
           </LineContainer>
 
           <LineContainer>

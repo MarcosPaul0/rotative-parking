@@ -61,7 +61,7 @@ export function HomeScreen() {
         `${ApiRoutes.PARKING_LOTS}/${locationId}`
       );
 
-      setAvailableParkingLots(response.data);
+      setAvailableParkingLots(response.data.vacancies);
     } catch {
       setAvailableParkingLots(0);
     }

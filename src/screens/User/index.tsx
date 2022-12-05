@@ -7,18 +7,19 @@ import { ApiRoutes } from '@enums/apiRoutes.enum';
 import { AppRoutes } from '@enums/appRoutes.enum';
 import { useNotify } from '@hooks/useNotify';
 import { apiClient } from '@services/apiClient';
-import { ScreenContainer } from '@styles/defaults';
+import { ScrollScreenContainer } from '@styles/defaults';
 import { SignOut } from 'phosphor-react-native';
 import { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { ThemeContext } from 'styled-components/native';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
-import { Roles } from '@enums/roles.enum';
+import { formatCpf } from '@utils/formatCpf';
 
-interface UpdateUserData {
+interface UpdateUserFormData {
   name: string;
   email: string;
   cpf: string;
+  password?: string;
 }
 
 export function UserScreen() {
@@ -33,27 +34,29 @@ export function UserScreen() {
   const {
     control,
     handleSubmit,
+    resetField,
     formState: { isSubmitting },
-  } = useForm<UpdateUserData>({
+  } = useForm<UpdateUserFormData>({
     defaultValues: {
       name: isAuthenticated ? user!.name : '',
       email: isAuthenticated ? user!.email : '',
-      cpf: isAuthenticated ? user!.cpf : '',
+      cpf: isAuthenticated ? formatCpf(user!.cpf) : '',
+      password: '',
     },
   });
 
-  async function updateUser({ name, email, cpf }: UpdateUserData) {
+  async function updateUser({ name, password }: UpdateUserFormData) {
     try {
       await apiClient.patch(`${ApiRoutes.USER}/${user?.id}`, {
         name,
-        email,
-        cpf,
+        password: password || undefined,
       });
 
       successNotify({
         title: 'Dados atualizados',
         message: 'Seus dados foram atualizados',
       });
+      resetField('password');
     } catch (error) {
       errorNotify({
         title: 'Erro ao atualizar',
@@ -88,7 +91,7 @@ export function UserScreen() {
   }
 
   return (
-    <ScreenContainer>
+    <ScrollScreenContainer>
       <Modal
         text="Tem certeza que deseja deletar sua conta? Esta é uma decisão definitiva"
         animationType="fade"
@@ -117,22 +120,37 @@ export function UserScreen() {
             control,
             name: 'email',
           }}
+          inputProps={{
+            editable: false,
+          }}
         />
         <Input
           label="CPF"
+          inputProps={{
+            editable: false,
+          }}
           controllerProps={{
             control,
             name: 'cpf',
           }}
         />
+        <Input
+          label="Nova Senha"
+          controllerProps={{
+            control,
+            name: 'password',
+          }}
+          inputProps={{
+            textContentType: 'password',
+            secureTextEntry: true,
+          }}
+        />
 
-        {user?.role === Roles.ADMIN && (
-          <Button
-            text="Atualizar"
-            onPress={handleSubmit(updateUser)}
-            isLoading={isSubmitting}
-          />
-        )}
+        <Button
+          text="Atualizar"
+          onPress={handleSubmit(updateUser)}
+          isLoading={isSubmitting}
+        />
 
         <Button
           text="Deletar perfil"
@@ -159,6 +177,6 @@ export function UserScreen() {
       </Card>
 
       <Toast />
-    </ScreenContainer>
+    </ScrollScreenContainer>
   );
 }

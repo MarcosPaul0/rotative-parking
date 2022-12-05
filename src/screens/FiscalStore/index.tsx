@@ -9,7 +9,6 @@ import {
   RegionData,
   SelectRegionModal,
 } from '@screens/Store/components/SelectRegionModal';
-import { SwitchSaleType } from '@screens/Store/components/SwitchSaleType';
 import {
   LeftText,
   LineContainer,
@@ -22,52 +21,39 @@ import { addHours, format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useNavigation } from '@react-navigation/native';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
-import { AppRoutes } from '@enums/appRoutes.enum';
 import { ApiRoutes } from '@enums/apiRoutes.enum';
 import { apiClient } from '@services/apiClient';
+import { useAuthContext } from '@contexts/AuthContext';
 import { SelectContainer } from './styles';
 
-export interface PaymentFormWithCardAndCpfData {
+export interface FiscalPaymentFormData {
   credits: number;
   vehiclePlate: string;
-  type: 'creditCard' | 'pix';
-  cardNumber?: string;
-  expirationMonth?: number;
-  expirationYear?: number;
-  cardBrand?: string;
-  description: string;
   region: number;
+  description: string;
   name: string;
-  cardValidity: string;
-  cvc: string;
   cpf: string;
   email: string;
 }
 
-export function OutStoreScreen() {
+export function FiscalStoreScreen() {
   const { successNotify, errorNotify } = useNotify();
 
-  const { navigate } = useNavigation();
+  const { user } = useAuthContext();
 
   const [selectRegionModalIsOpen, setSelectRegionModalIsOpen] = useState(false);
   const [activeRegion, setActiveRegion] = useState<RegionData | null>(null);
 
-  const formMethods = useForm<PaymentFormWithCardAndCpfData>({
+  const formMethods = useForm<FiscalPaymentFormData>({
     defaultValues: {
       credits: 1,
       vehiclePlate: '',
-      type: 'creditCard',
       name: '',
       cpf: '',
       email: '',
-      cardNumber: '',
-      cardBrand: '',
       description: '',
       region: 0,
-      cardValidity: '',
-      cvc: '',
     },
   });
 
@@ -81,7 +67,6 @@ export function OutStoreScreen() {
     formState: { errors, isSubmitting },
   } = formMethods;
 
-  const typeWatched = watch('type');
   const creditsWatched = watch('credits');
   const regionWatched = watch('region');
 
@@ -132,64 +117,33 @@ export function OutStoreScreen() {
     const {
       credits,
       vehiclePlate,
-      type,
-      cardNumber,
-      cardBrand,
       description,
-      region,
-      name,
-      cardValidity,
-      cvc,
       email,
       cpf,
-    }: PaymentFormWithCardAndCpfData = getValues();
+      name,
+      region,
+    }: FiscalPaymentFormData = getValues();
     try {
-      const pixPaymentData = {
-        method: type,
+      const paymentData = {
         name,
         cpf,
         email,
+        region,
         license_plate: vehiclePlate,
         credits,
+        method: 'presential',
         description,
-        region,
+        buyer_id: user!.id,
+        status: 'approved',
       };
 
-      const creditCardPaymentData = {
-        ...pixPaymentData,
-        card_info: {
-          card_number: cardNumber?.replace(/\s/g, ''),
-          card_holder_cpf: cpf,
-          securityCode: cvc,
-          expiration_month: +cardValidity.split('/')[0],
-          expiration_year: +cardValidity.split('/')[1],
-          card_brand: cardBrand,
-          card_holder_name: name,
-        },
-        installments: 1,
-      };
+      await apiClient.post(ApiRoutes.PAYMENTS, paymentData);
 
-      const response = await apiClient.post(
-        ApiRoutes.PAYMENTS,
-        type === 'creditCard' ? creditCardPaymentData : pixPaymentData
-      );
       reset();
       successNotify({
         title: 'Compra registrada',
         message: 'A compra foi registrada como pendente',
       });
-
-      if (type === 'creditCard') {
-        navigate(AppRoutes.SUCCESS_CARD_SALE, {
-          validate: finalDate,
-        });
-      } else {
-        navigate(AppRoutes.SUCCESS_PIX_SALE, {
-          ticketUrl: response.data.aditional_data.mp_ticket_url,
-          tokenQrCode: response.data.aditional_data.pix_qr_code,
-          validate: finalDate,
-        });
-      }
     } catch {
       reset();
       errorNotify({
@@ -206,8 +160,6 @@ export function OutStoreScreen() {
           title="Comprar Créditos"
           subtitle="Compre créditos de estacionamento"
         >
-          <SwitchSaleType setValue={setValue} type={typeWatched} />
-
           <LineContainer>
             <LeftText>Quantidade de Créditos</LeftText>
 
@@ -247,7 +199,7 @@ export function OutStoreScreen() {
           </SelectContainer>
 
           <Input
-            label="Nome no cartão"
+            label="Nome"
             controllerProps={{
               control,
               name: 'name',
@@ -296,60 +248,17 @@ export function OutStoreScreen() {
             errorMessage={errors.vehiclePlate?.message}
           />
 
-          {typeWatched === 'creditCard' ? (
-            <>
-              <MaskedInput
-                mask="9999 9999 9999 9999"
-                label="Número do cartão"
-                controllerProps={{
-                  control,
-                  name: 'number',
-                  rules: {
-                    required: requiredRule,
-                  },
-                }}
-                errorMessage={errors.cardNumber?.message}
-              />
-
-              <MaskedInput
-                mask="999"
-                label="CVC"
-                controllerProps={{
-                  control,
-                  name: 'cvc',
-                  rules: {
-                    required: requiredRule,
-                    maxLength: {
-                      value: 3,
-                      message: Validations.CVC_LENGTH,
-                    },
-                    minLength: {
-                      value: 3,
-                      message: Validations.CVC_LENGTH,
-                    },
-                  },
-                }}
-                errorMessage={errors.cvc?.message}
-              />
-
-              <MaskedInput
-                mask="99/99"
-                label="Validade"
-                controllerProps={{
-                  control,
-                  name: 'cardValidity',
-                  rules: {
-                    required: requiredRule,
-                    minLength: {
-                      value: 5,
-                      message: Validations.EXPIRATION_DATE,
-                    },
-                  },
-                }}
-                errorMessage={errors.cardValidity?.message}
-              />
-            </>
-          ) : null}
+          <Input
+            label="Descrição"
+            controllerProps={{
+              control,
+              name: 'description',
+              rules: {
+                required: requiredRule,
+              },
+            }}
+            errorMessage={errors.description?.message}
+          />
 
           <Button
             text="Finalizar Compra"

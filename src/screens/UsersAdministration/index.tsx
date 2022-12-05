@@ -21,8 +21,6 @@ export function UserAdministration() {
       try {
         const response = await apiClient.get<UserData[]>(ApiRoutes.USER);
 
-        console.log(response.data);
-
         return response.data;
       } catch {
         return [];

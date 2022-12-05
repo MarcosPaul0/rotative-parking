@@ -43,9 +43,11 @@ export function UpdateUserRoleModal({
     setValue('role', newRole);
   }
 
-  async function updateUserRole() {
+  async function updateUserRole({ role }: UpdateUserRoleFormData) {
     try {
-      await apiClient.patch(`${ApiRoutes.USER}/${user.id}`);
+      await apiClient.patch(`${ApiRoutes.USER}/${user.id}`, {
+        role,
+      });
 
       successNotify({
         title: 'Usuário atualizado',
