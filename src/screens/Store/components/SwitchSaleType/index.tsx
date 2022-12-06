@@ -12,7 +12,7 @@ import {
 
 interface SwitchSaleTypeProps {
   setValue: UseFormSetValue<any>;
-  type: 'creditCard' | 'pix';
+  type: 'credit_card' | 'pix';
 }
 
 export function SwitchSaleType({ type, setValue }: SwitchSaleTypeProps) {
@@ -21,17 +21,17 @@ export function SwitchSaleType({ type, setValue }: SwitchSaleTypeProps) {
   return (
     <SwitchSalesTypeContainer>
       <TypeButton
-        isActive={type === 'creditCard'}
-        onPress={() => setValue('type', 'creditCard')}
+        isActive={type === 'credit_card'}
+        onPress={() => setValue('type', 'credit_card')}
         spacing={2}
       >
         <CreditCard
           size={54}
-          color={type === 'creditCard' ? COLORS.GRAY_100 : COLORS.GREEN_500}
+          color={type === 'credit_card' ? COLORS.GRAY_100 : COLORS.GREEN_500}
         />
 
         <TextContainer>
-          <TypeButtonText isActive={type === 'creditCard'}>
+          <TypeButtonText isActive={type === 'credit_card'}>
             Cartão de Crédito
           </TypeButtonText>
         </TextContainer>

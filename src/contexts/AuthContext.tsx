@@ -173,9 +173,15 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   async function logout() {
     setUser(null);
 
-    await AsyncStorage.removeItem(StorageItems.TOKEN);
+    try {
+      await AsyncStorage.removeItem(StorageItems.TOKEN);
+    } catch (error) {
+      typeof error;
+    }
 
-    socket.close();
+    if (socket.OPEN === 1) {
+      socket.close();
+    }
 
     navigate(AppRoutes.LOGIN);
   }

@@ -45,7 +45,7 @@ export function UpdateUserRoleModal({
 
   async function updateUserRole({ role }: UpdateUserRoleFormData) {
     try {
-      await apiClient.patch(`${ApiRoutes.USER}/${user.id}`, {
+      await apiClient.post(`${ApiRoutes.USER_ROLE}/${user.id}`, {
         role,
       });
 
@@ -55,7 +55,7 @@ export function UpdateUserRoleModal({
       });
       refetchUsers();
       closeModal();
-    } catch {
+    } catch (error) {
       errorNotify({
         title: 'Erro ao atualizar o usuário',
         message:

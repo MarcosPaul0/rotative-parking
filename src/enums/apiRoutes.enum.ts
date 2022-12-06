@@ -11,4 +11,5 @@ export enum ApiRoutes {
   REGIONS = '/regions',
   PARKING_LOTS = '/regions/vacancies/',
   USE_CREDITS = '/use-credits',
+  USER_ROLE = '/users/setRole',
 }

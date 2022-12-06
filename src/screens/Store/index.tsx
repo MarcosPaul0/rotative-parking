@@ -34,9 +34,9 @@ import { RegionData, SelectRegionModal } from './components/SelectRegionModal';
 export interface PaymentFormData {
   credits: number;
   vehiclePlate: string;
-  type: 'creditCard' | 'pix';
+  type: 'credit_card' | 'pix';
   cardNumber?: string;
-  securityCode?: number;
+  securityCode?: string;
   expirationMonth?: number;
   expirationYear?: number;
   cardBrand?: string;
@@ -63,10 +63,10 @@ export function StoreScreen() {
     defaultValues: {
       credits: 1,
       vehiclePlate: '',
-      type: 'creditCard',
+      type: 'credit_card',
       cardNumber: '',
       cardHolderName: '',
-      securityCode: 0,
+      securityCode: '',
       expirationMonth: 0,
       expirationYear: 0,
       cardBrand: '',
@@ -146,7 +146,7 @@ export function StoreScreen() {
         card_info: {
           card_number: cardNumber?.replace(/\s/g, ''),
           card_holder_cpf: user?.cpf,
-          securityCode,
+          securityCode: String(securityCode),
           expiration_month: expirationMonth,
           expiration_year: expirationYear,
           card_brand: cardBrand,
@@ -157,7 +157,7 @@ export function StoreScreen() {
 
       const response = await apiClient.post<PaymentResponse>(
         ApiRoutes.PAYMENTS,
-        type === 'creditCard' ? creditCardPaymentData : pixPaymentData
+        type === 'credit_card' ? creditCardPaymentData : pixPaymentData
       );
 
       reset();
@@ -166,7 +166,7 @@ export function StoreScreen() {
         message: 'A compra foi registrada como pendente',
       });
 
-      if (type === 'creditCard') {
+      if (type === 'credit_card') {
         navigate(AppRoutes.SUCCESS_CARD_SALE, {
           validate: finalDate,
         });
@@ -265,7 +265,7 @@ export function StoreScreen() {
             )}
           </SelectContainer>
 
-          {typeWatched === 'creditCard' && <BuyByCreditCard />}
+          {typeWatched === 'credit_card' && <BuyByCreditCard />}
 
           <SelectVehicleModal
             isOpen={vehicleModalIsOpen}

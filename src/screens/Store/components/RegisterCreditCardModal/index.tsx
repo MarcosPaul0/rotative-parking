@@ -53,7 +53,7 @@ export function RegisterCreditCardModal({
   }: CreditCardFormData) {
     const expirations = validity.split('/');
     const expirationMonth = +expirations[0];
-    const expirationYear = +expirations[0];
+    const expirationYear = +expirations[1] + 2000;
 
     try {
       await apiClient.post(ApiRoutes.CREDIT_CARD, {
